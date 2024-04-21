@@ -81,6 +81,7 @@ export default function DashManifests() {
                     <>
                         <Table hoverable className='shadow-md'>
                             <Table.Head>
+                                <Table.HeadCell>Employ username</Table.HeadCell>
                                 <Table.HeadCell>Date updated</Table.HeadCell>
                                 <Table.HeadCell>Manifest stantion</Table.HeadCell>
                                 <Table.HeadCell>Manifest plate</Table.HeadCell>
@@ -94,6 +95,9 @@ export default function DashManifests() {
                             {userManifests.map((manifest) => (
                                 <Table.Body className='divide-y' key={manifest._id}>
                                     <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                                        <Table.Cell>
+                                            {manifest.driverName}
+                                        </Table.Cell>
                                         <Table.Cell>
                                             {new Date(manifest.updatedAt).toLocaleDateString()}
                                         </Table.Cell>

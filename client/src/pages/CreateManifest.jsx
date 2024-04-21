@@ -7,23 +7,66 @@ import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 
 export default function CreateManifest() {
   const [formData, setFormData] = useState({})
   const [publishError, setPublishError] = useState(null)
 
+  const { currentUser } = useSelector((state) => state.user)
+
   const navigate = useNavigate()
 
+  const calculateWorkingHours = () => {
+    // Recalculate workingHours
+    const start = new Date(`01/01/2000 ${formData.startTime}`);
+    const end = new Date(`01/01/2000 ${formData.endTime}`);
+    let workingHours = (end - start) / (1000 * 60 * 60); // Convert milliseconds to hours
+
+    // Subtract 30 minutes for the break
+    workingHours -= 0.5; // Subtract 30 minutes
+
+    // Add 15 minutes if working hours exceed 8 hours and 30 minutes
+    if (workingHours > 8.5) { // More than 8 hours and 30 minutes
+      workingHours -= 0.25; // Subtract additional 15 minutes
+    }
+
+    // Convert workingHours to hh:mm format
+    const hours = Math.floor(workingHours);
+    const minutes = Math.round((workingHours - hours) * 60);
+
+    // Pad single digit hours and minutes with leading zeros
+    const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+    return `${formattedHours}:${formattedMinutes}`;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // Recalculate totalKm
+    const totalKm = formData.kmEnd - formData.kmStart;
+
+    // Calculate working hours in hh:mm format
+    const workingHours = calculateWorkingHours();
+
+    // Include recalculated fields in formData
+    const updatedFormData = {
+      ...formData,
+      driverNamer: currentUser.username,
+      totalKm,
+      workingHours,
+    };
+
+
     try {
       const res = await fetch('/api/manifest/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(updatedFormData),
       })
       const data = await res.json()
       if (!res.ok) {

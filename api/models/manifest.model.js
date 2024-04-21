@@ -5,6 +5,9 @@ const manifestSchema = new mongoose.Schema({
         type: String,
         required:true,
     },
+    driverName: {
+        type: String,
+    },
     stantion: {
         type: String,
         default: 'uncategorized',
@@ -23,16 +26,13 @@ const manifestSchema = new mongoose.Schema({
     kmStart: {
         type: Number,
         required:true,
-        default:0
     },
     kmEnd: {
         type: Number,
         required: true,
-        default:0
     },
     totalKm: {
         type: Number,
-        default:0
     },
     startTime: {
         type: String,
@@ -56,7 +56,6 @@ const manifestSchema = new mongoose.Schema({
     },
     workingHours: {
         type: String,
-        default: '0'
     },
     slug: {
         type: String,

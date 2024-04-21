@@ -5,11 +5,13 @@ import bcryptjs from 'bcryptjs'
 export const createManifest = async (req, res, next) => {
 
     const {
+        driverName,
         stantion,
         plate,
         tor,
         kmStart,
         kmEnd,
+        totalKm,
         startTime,
         departure,
         firstDelivery,
@@ -28,12 +30,14 @@ export const createManifest = async (req, res, next) => {
 
     const newManifest = new Manifest({
         userId: req.user.id,
+        driverName,
         slug,
         stantion,
         plate,
         tor,
         kmStart,
         kmEnd,
+        totalKm,
         startTime,
         departure,
         firstDelivery,
@@ -108,7 +112,8 @@ export const updateManifest = async (req, res, next) => {
                     plate:req.body.plate,
                     tor:req.body.tor,
                     kmStart:req.body.kmStart,
-                    kmEnd:req.body.kmEnd,
+                    kmEnd: req.body.kmEnd,
+                    totalKm:req.body.totalKm,
                     startTime:req.body.startTime,
                     departure:req.body.departure,
                     firstDelivery:req.body.firstDelivery,
