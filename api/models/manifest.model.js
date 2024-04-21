@@ -22,10 +22,12 @@ const manifestSchema = new mongoose.Schema({
     },
     kmStart: {
         type: Number,
+        required:true,
         default:0
     },
     kmEnd: {
         type: Number,
+        required: true,
         default:0
     },
     totalKm: {
@@ -38,12 +40,15 @@ const manifestSchema = new mongoose.Schema({
     },
     departure: {
         type: String,
+        required:true
     },
     firstDelivery: {
         type: String,
+        required:true
     },
     lastDelivery: {
         type: String,
+        require:true
     },
     endTime: {
         type: String,
@@ -51,7 +56,13 @@ const manifestSchema = new mongoose.Schema({
     },
     workingHours: {
         type: String,
+        default: '0'
     },
+    slug: {
+        type: String,
+        required: true,
+        unique: true
+    }
 }, { timestamps: true })
 
 const Manifest = mongoose.model('Manifest', manifestSchema)

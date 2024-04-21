@@ -9,29 +9,32 @@ import Header from './components/Header'
 import ScrollToTop from './components/ScrollToTop'
 import FooterCom from './components/FooterCom'
 import PrivateRoute from './components/PrivateRoute'
-import CreateManifest from './components/CreateManifest'
-import UpdateManifest from './components/UpdateManifest'
+import CreateManifest from './pages/CreateManifest'
+import UpdateManifest from './pages/UpdateManifest'
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute'
+import ManifestPage from './pages/ManifestPage'
 
 export default function App() {
   return (
     <BrowserRouter>
       <Header />
-      <ScrollToTop/>
+      <ScrollToTop />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/sign-up' element={<SignUp />} />
-        <Route element={<PrivateRoute/>}>
-                    <Route path='/dashboard' element={<Dashboard />} />
-                </Route>
-                <Route element={<OnlyAdminPrivateRoute/>}>
-                    <Route path='/create-manifest' element={<CreateManifest />} />
-                    <Route path='/update-manifest/:manifestId' element={<UpdateManifest />} />
-                </Route>
+        <Route path='/manifest/:manifestSlug' element={<ManifestPage />} />
+        <Route element={<PrivateRoute />}>
+          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/create-manifest' element={<CreateManifest />} />
+        </Route>
+        <Route element={<OnlyAdminPrivateRoute />}>
+          <Route path='/create-manifest' element={<CreateManifest />} />
+          <Route path='/update-manifest/:manifestId' element={<UpdateManifest />} />
+        </Route>
       </Routes>
-      <FooterCom/>
+      <FooterCom />
     </BrowserRouter>
   )
 }

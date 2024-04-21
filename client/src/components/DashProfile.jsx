@@ -228,7 +228,7 @@ export default function DashProfile() {
                     {loading ? 'Loading...' : 'Update'}
                 </Button>
                 {
-                    currentUser.isAdmin && (
+                    
                         <Link to={'/create-manifest'}>
                             <Button
                                 type='submit'
@@ -237,7 +237,7 @@ export default function DashProfile() {
                                 Create a Manifest
                             </Button>
                         </Link>
-                    )
+                    
                 }
             </form>
             <div className="text-red-500 flex justify-between mt-5">
