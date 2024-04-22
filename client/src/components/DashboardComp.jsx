@@ -36,12 +36,13 @@ export default function DashboardComp() {
     };
     const fetchPosts = async () => {
       try {
-        const res = await fetch('/api/post/getposts?limit=5');
+        const res = await fetch('/api/manifest/getmanifests?limit=5');
         const data = await res.json();
         if (res.ok) {
-          setPosts(data.posts);
-          setTotalPosts(data.totalPosts);
-          setLastMonthPosts(data.lastMonthPosts);
+          
+          setPosts(data.manifests);
+          setTotalPosts(data.totalManifests);
+          setLastMonthPosts(data.lastMonthManifests);
         }
       } catch (error) {
         console.log(error.message);
@@ -193,14 +194,10 @@ export default function DashboardComp() {
                 <Table.Body key={post._id} className='divide-y'>
                   <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell>
-                      <img
-                        src={post.image}
-                        alt='user'
-                        className='w-14 h-10 rounded-md bg-gray-500'
-                      />
+                      {post.username}
                     </Table.Cell>
-                    <Table.Cell className='w-96'>{post.title}</Table.Cell>
-                    <Table.Cell className='w-5'>{post.category}</Table.Cell>
+                    <Table.Cell className='w-96'>{post.totalKm}</Table.Cell>
+                    <Table.Cell className='w-5'>{post.workingHours}</Table.Cell>
                   </Table.Row>
                 </Table.Body>
               ))}

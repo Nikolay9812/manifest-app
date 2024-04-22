@@ -85,7 +85,7 @@ export default function DashSidebar() {
                                     icon={HiDocumentText}
                                     as='div'
                                 >
-                                    Manifests
+                                    AllManifests
                                 </Sidebar.Item>
                             </Link>
                         )

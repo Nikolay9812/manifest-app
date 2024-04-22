@@ -5,7 +5,6 @@ import bcryptjs from 'bcryptjs'
 export const createManifest = async (req, res, next) => {
 
     const {
-        driverName,
         stantion,
         plate,
         tor,
@@ -30,7 +29,6 @@ export const createManifest = async (req, res, next) => {
 
     const newManifest = new Manifest({
         userId: req.user.id,
-        driverName,
         slug,
         stantion,
         plate,
@@ -95,7 +93,7 @@ export const getManifests = async (req, res, next) => {
         const startIndex = parseInt(req.query.startIndex) || 0
         const limit = parseInt(req.query.limit) || 9
         const sortDirection = req.query.order === 'asc' ? 1 : -1
-        const manifests = await Manifest.find().sort({ updatedAt: sortDirection }).skip(startIndex).limit(limit)
+        const manifests = await Manifest.find().sort({ updatedAt: sortDirection }).skip(startIndex).limit(limit).populate('user', 'username')
 
         const totalManifests = await Manifest.countDocuments()
 

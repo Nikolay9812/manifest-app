@@ -19,7 +19,17 @@ export default function DashManifests() {
                 const res = await fetch(`/api/manifest/getmanifests?userId=${currentUser._id}`)
                 const data = await res.json()
                 if (res.ok) {
-                    setUserManifests(data.manifests)
+                    // Iterate through the fetched manifests and fetch the username for each user ID
+                    const manifestsWithUsernames = await Promise.all(data.manifests.map(async (manifest) => {
+                        const userRes = await fetch(`/api/user/${manifest.userId}`) // Assuming an endpoint to fetch user details by ID
+                        const userData = await userRes.json()
+                        if (userRes.ok) {
+                            return { ...manifest, username: userData.username }
+                        } else {
+                            return { ...manifest, username: 'Unknown' } // Default username if fetching fails
+                        }
+                    }))
+                    setUserManifests(manifestsWithUsernames)
                     if (data.manifests.length < 9) {
                         setShowMore(false)
                     }
@@ -34,23 +44,7 @@ export default function DashManifests() {
         }
     }, [currentUser._id])
 
-    useEffect(() => {
-        const fetchUserManifests = async () => {
-            try {
-                const res = await fetch(`/api/manifest/getusermanifests`)
-                const data = await res.json()
-                if (res.ok) {
-                    setUserManifests(data.manifests)
-                    if (data.manifests.length < 9) {
-                        setShowMore(false)
-                    }
-                }
-            } catch (error) {
-                console.log(error.message)
-            }
-        }
-        fetchUserManifests(); // Fetch manifests for the current user
-    }, [])
+    
     
 
     const handleShowMore = async () => {
@@ -115,7 +109,7 @@ export default function DashManifests() {
                                 <Table.Body className='divide-y' key={manifest._id}>
                                     <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                                         <Table.Cell>
-                                            {manifest.driverName}
+                                            {manifest.username}
                                         </Table.Cell>
                                         <Table.Cell>
                                             {new Date(manifest.updatedAt).toLocaleDateString()}
