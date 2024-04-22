@@ -56,6 +56,40 @@ export const createManifest = async (req, res, next) => {
     }
 }
 
+export const getUserManifests = async (req, res, next) => {
+    try {
+        const startIndex = parseInt(req.query.startIndex) || 0
+        const limit = parseInt(req.query.limit) || 9
+        const sortDirection = req.query.order === 'asc' ? 1 : -1
+        const userId = req.user.id;
+        const manifests = await Manifest.find({ userId }).sort({ updatedAt: sortDirection }).skip(startIndex).limit(limit)
+
+        const totalManifests = await Manifest.countDocuments({userId})
+
+        const now = new Date()
+
+        const oneMonthAgo = new Date(
+            now.getFullYear(),
+            now.getMonth() - 1,
+            now.getDate()
+        )
+
+        const lastMonthManifests = await Manifest.countDocuments({
+            userId,
+            createdAt: { $gte: oneMonthAgo },
+        })
+
+        res.status(200).json({
+            manifests,
+            totalManifests,
+            lastMonthManifests
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+
 export const getManifests = async (req, res, next) => {
     try {
         const startIndex = parseInt(req.query.startIndex) || 0
@@ -108,18 +142,18 @@ export const updateManifest = async (req, res, next) => {
             req.params.manifestId,
             {
                 $set: {
-                    stantion:req.body.stantion,
-                    plate:req.body.plate,
-                    tor:req.body.tor,
-                    kmStart:req.body.kmStart,
+                    stantion: req.body.stantion,
+                    plate: req.body.plate,
+                    tor: req.body.tor,
+                    kmStart: req.body.kmStart,
                     kmEnd: req.body.kmEnd,
-                    totalKm:req.body.totalKm,
-                    startTime:req.body.startTime,
-                    departure:req.body.departure,
-                    firstDelivery:req.body.firstDelivery,
-                    lastDelivery:req.body.lastDelivery,
-                    endTime:req.body.endTime,
-                    workingHours:req.body.workingHours
+                    totalKm: req.body.totalKm,
+                    startTime: req.body.startTime,
+                    departure: req.body.departure,
+                    firstDelivery: req.body.firstDelivery,
+                    lastDelivery: req.body.lastDelivery,
+                    endTime: req.body.endTime,
+                    workingHours: req.body.workingHours
                 }
             }, { new: true }
         )

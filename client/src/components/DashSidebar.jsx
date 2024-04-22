@@ -66,9 +66,19 @@ export default function DashSidebar() {
                             Profile
                         </Sidebar.Item>
                     </Link>
+                    <Link to='/dashboard?tab=manifestsUser'>
+                        <Sidebar.Item
+                            active={tab === 'manifestsUser'}
+                            icon={HiDocumentText}
+                            labelColor='dark'
+                            as='div'
+                        >
+                            Manifests
+                        </Sidebar.Item>
+                    </Link>
                     {
                         
-
+                        currentUser.isAdmin && (
                             <Link to='/dashboard?tab=manifests'>
                                 <Sidebar.Item
                                     active={tab === 'manifests'}
@@ -78,6 +88,7 @@ export default function DashSidebar() {
                                     Manifests
                                 </Sidebar.Item>
                             </Link>
+                        )
                         
                     }
                     {

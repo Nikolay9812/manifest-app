@@ -14,27 +14,6 @@ export default function DashManifests() {
     const [manifestIdToDelete, setManifestIdToDelete] = useState('')
 
     useEffect(() => {
-        const fetchManifests = async () => {
-            try {
-                const res = await fetch(`/api/manifest/getmanifests?userId=${currentUser._id}`)
-                const data = await res.json()
-                if (res.ok) {
-                    setUserManifests(data.manifests)
-                    if (data.manifests.length < 9) {
-                        setShowMore(false)
-                    }
-                }
-            } catch (error) {
-                console.log(error.message)
-            }
-        }
-
-        if (currentUser.isAdmin) {
-            fetchManifests()
-        }
-    }, [currentUser._id])
-
-    useEffect(() => {
         const fetchUserManifests = async () => {
             try {
                 const res = await fetch(`/api/manifest/getusermanifests`)
@@ -57,7 +36,7 @@ export default function DashManifests() {
         const startIndex = userManifests.length
         try {
             const res =
-                await fetch(`/api/manifest/getmanifests?userId=${currentUser._id}&startIndex=${startIndex}`)
+                await fetch(`/api/manifest/getusermanifests?userId=${currentUser._id}&startIndex=${startIndex}`)
 
             const data = await res.json()
 
@@ -96,28 +75,20 @@ export default function DashManifests() {
         <div className='table-auto overflow-x-scroll md:mx-auto p-3 
     scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
             {
-                currentUser.isAdmin && userManifests.length > 0 ? (
+                userManifests.length > 0 ? (
                     <>
                         <Table hoverable className='shadow-md'>
                             <Table.Head>
-                                <Table.HeadCell>Employ username</Table.HeadCell>
                                 <Table.HeadCell>Date updated</Table.HeadCell>
                                 <Table.HeadCell>Manifest stantion</Table.HeadCell>
                                 <Table.HeadCell>Manifest plate</Table.HeadCell>
                                 <Table.HeadCell>Manifest Km</Table.HeadCell>
                                 <Table.HeadCell>Manifest hours</Table.HeadCell>
-                                <Table.HeadCell>Delete</Table.HeadCell>
-                                <Table.HeadCell>
-                                    <span>Edit</span>
-                                </Table.HeadCell>
                             </Table.Head>
                             {userManifests.map((manifest) => (
                                 <Table.Body className='divide-y' key={manifest._id}>
                                     <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                                        <Table.Cell>
-                                            {manifest.driverName}
-                                        </Table.Cell>
-                                        <Table.Cell>
+                                       <Table.Cell>
                                             {new Date(manifest.updatedAt).toLocaleDateString()}
                                         </Table.Cell>
                                         <Table.Cell>
@@ -140,23 +111,6 @@ export default function DashManifests() {
                                             <p>{ manifest.startTime}</p>
                                             <p>{ manifest.endTime}</p>
                                             <p>{ manifest.workingHours}</p>
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            <span
-                                                onClick={() => {
-                                                    setShowModal(true)
-                                                    setManifestIdToDelete(manifest._id)
-                                                }}
-                                                className='font-medium text-red-500 hover:underline cursor-pointer'>
-                                                Delete
-                                            </span>
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            <Link className='text-teal- hover:underline' to={`/update-manifest/${manifest._id}`}>
-                                                <span>
-                                                    Edit
-                                                </span>
-                                            </Link>
                                         </Table.Cell>
                                     </Table.Row>
                                 </Table.Body>
