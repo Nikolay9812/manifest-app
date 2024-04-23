@@ -62,7 +62,7 @@ export const getUserManifests = async (req, res, next) => {
         const userId = req.user.id;
         const manifests = await Manifest.find({ userId }).sort({ updatedAt: sortDirection }).skip(startIndex).limit(limit)
 
-        const totalManifests = await Manifest.countDocuments({userId})
+        const totalManifests = await Manifest.countDocuments({ userId })
 
         const now = new Date()
 
@@ -93,7 +93,18 @@ export const getManifests = async (req, res, next) => {
         const startIndex = parseInt(req.query.startIndex) || 0
         const limit = parseInt(req.query.limit) || 9
         const sortDirection = req.query.order === 'asc' ? 1 : -1
-        const manifests = await Manifest.find().sort({ updatedAt: sortDirection }).skip(startIndex).limit(limit).populate('user', 'username')
+        const manifests = await Manifest.find({
+            ...(req.query.userId && { userId: req.query.userId }),
+            ...(req.query.stantion && { stantion: req.query.stantion }),
+            ...(req.query.slug && { slug: req.query.slug }),
+            ...(req.query.manifestId && { manifestId: req.query.manifestId }),
+            ...(req.query.searchTerm && {
+                $or: [
+                    { plate: { $regex: req.query.searchTerm, $options: 'i' } },
+                    { tor: { $regex: req.query.searchTerm, $options: 'i' } },
+                ]
+            }),
+        }).sort({ updatedAt: sortDirection }).skip(startIndex).limit(limit).populate('user', 'username')
 
         const totalManifests = await Manifest.countDocuments()
 
