@@ -1,6 +1,10 @@
 import { Button, Spinner } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { CiClock2 } from "react-icons/ci";
+import { FaRoute } from "react-icons/fa6";
+
+
 
 export default function ManifestPage() {
   const [loading, setLodaing] = useState(true)
@@ -60,29 +64,106 @@ export default function ManifestPage() {
   )
   return (
     <main className='p-3 flex flex-col max-w-6xl mx-auto min-h-screen'>
-      <h1 className='text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>{manifest && manifest.title}</h1>
-      <Link to={`search?category=${manifest && manifest.stantion}`} className='self-center mt-5'>
-        <Button color='gray' pill size='xs'>
-          {manifest && manifest.stantion}
-        </Button>
-      </Link>
-      <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
-        <span>{manifest && new Date(manifest.createdAt).toLocaleDateString()}</span>
-        <span className='italic'>{manifest.plate}</span>
-        <span className='italic'>{manifest.tor}</span>
-      </div>
-      <div className="flex justify-center items-center">
-        <div className='w-full'>{manifest.departure}</div>
-        <div className='w-full'>{manifest.startTime}</div>
-        <div className='w-full'>{manifest.firstDelivery}</div>
-        <div className='w-full'>{manifest.lastDelivery}</div>
-        <div className='w-full'>{manifest.endTime}</div>
-        <div className='w-full'>{manifest.workingHours}</div>
-      </div>
-      <div className="mt-5">
-        <div className="">Start Km  { manifest.kmStart}</div>
-        <div className="">End Km { manifest.kmEnd}</div>
-        <div className="">Total Km { manifest.totalKm}</div>
+      <h1 className='text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>Delivery Associate control sheet</h1>
+      <div className="flex flex-wrap gap-3 p-3">
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Tor</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <FaRoute className='text-gray-500' />
+            {manifest.tor}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Company</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <span className='text-sm'>Ivanov Transport</span>
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Driver Name</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <p>In proggres</p>
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Packages</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <p>In proggres</p>
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Plate</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            {manifest.plate}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Date</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            {new Date(manifest.updatedAt).toLocaleDateString()}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full text-sm text-center bg-gray-300 p-2  dark:text-gray-900 font-semibold'>Handover time handled</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <CiClock2 />
+            {manifest.startTime}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full text-sm text-center bg-gray-300 p-2  dark:text-gray-900 font-semibold'>Starting kilometers</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            {manifest.kmStart}
+            <span>km</span>
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full text-sm text-center bg-gray-300 p-2  dark:text-gray-900 font-semibold'>Departure time stantion</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <CiClock2 />
+            {manifest.departure}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full text-sm text-center bg-gray-300 p-2  dark:text-gray-900 font-semibold'>Time of first delivery</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <CiClock2 />
+            {manifest.firstDelivery}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full text-sm text-center bg-gray-300 p-2  dark:text-gray-900 font-semibold'>Return time station</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <p>in proggres</p>
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Ending kilometers</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            {manifest.kmEnd}
+            <span>km</span>
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Time of last delivery</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <CiClock2 />
+            {manifest.lastDelivery}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Time of complete debrief</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <CiClock2 />
+            {manifest.endTime}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Return packages</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+          <p>in proggres</p>
+          </div>
+        </div>
       </div>
 
     </main>
