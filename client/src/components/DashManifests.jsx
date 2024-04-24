@@ -12,11 +12,12 @@ export default function DashManifests() {
     const [showMore, setShowMore] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [manifestIdToDelete, setManifestIdToDelete] = useState('')
+    console.log(userManifests);
 
     useEffect(() => {
         const fetchManifests = async () => {
             try {
-                const res = await fetch(`/api/manifest/getmanifests?userId=${currentUser._id}`)
+                const res = await fetch(`/api/manifest/getmanifests`)
                 const data = await res.json()
                 if (res.ok) {
                     // Iterate through the fetched manifests and fetch the username for each user ID
@@ -51,12 +52,22 @@ export default function DashManifests() {
         const startIndex = userManifests.length
         try {
             const res =
-                await fetch(`/api/manifest/getmanifests?userId=${currentUser._id}&startIndex=${startIndex}`)
+                await fetch(`/api/manifest/getmanifests?startIndex=${startIndex}`)
 
             const data = await res.json()
 
             if (res.ok) {
-                setUserManifests((prev) => [...prev, ...data.manifests])
+                const manifestsWithUsernames = await Promise.all(data.manifests.map(async (manifest) => {
+                    const userRes = await fetch(`/api/user/${manifest.userId}`);
+                    const userData = await userRes.json();
+                    if (userRes.ok) {
+                        return { ...manifest, username: userData.username };
+                    } else {
+                        return { ...manifest, username: 'Unknown' };
+                    }
+                }));
+
+                setUserManifests((prev) => [...prev, ...manifestsWithUsernames])
                 if (data.manifests.length < 9) {
                     setShowMore(false)
                 }

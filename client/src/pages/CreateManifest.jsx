@@ -47,6 +47,8 @@ export default function CreateManifest() {
 
     // Recalculate totalKm
     const totalKm = formData.kmEnd - formData.kmStart;
+    // Recalculate totalKm
+    const totalPackages = formData.packages - formData.returnedPackages;
 
     // Calculate working hours in hh:mm format
     const workingHours = calculateWorkingHours();
@@ -54,8 +56,9 @@ export default function CreateManifest() {
     // Include recalculated fields in formData
     const updatedFormData = {
       ...formData,
-      driverNamer: currentUser.username,
+      driverName: currentUser.username,
       totalKm,
+      totalPackages,
       workingHours,
     };
 
@@ -147,7 +150,22 @@ export default function CreateManifest() {
         <TextInput
           type='time'
           onChange={(e) =>
+            setFormData({ ...formData, returnTime: e.target.value })}
+        />
+        <TextInput
+          type='time'
+          onChange={(e) =>
             setFormData({ ...formData, endTime: e.target.value })}
+        />
+        <TextInput
+          type='number'
+          onChange={(e) =>
+            setFormData({ ...formData, packages: e.target.value })}
+        />
+        <TextInput
+          type='number'
+          onChange={(e) =>
+            setFormData({ ...formData, returnedPackages: e.target.value })}
         />
         <Button
           type='submit'

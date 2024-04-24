@@ -3,11 +3,14 @@ import mongoose from 'mongoose'
 const manifestSchema = new mongoose.Schema({
     userId: {
         type: String,
-        required:true,
+        required: true,
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+    },
+    driverName: {
+        type: String,
         required: true
     },
     stantion: {
@@ -27,7 +30,7 @@ const manifestSchema = new mongoose.Schema({
     },
     kmStart: {
         type: Number,
-        required:true,
+        required: true,
     },
     kmEnd: {
         type: Number,
@@ -38,26 +41,42 @@ const manifestSchema = new mongoose.Schema({
     },
     startTime: {
         type: String,
-        required:true
+        required: true
     },
     departure: {
         type: String,
-        required:true
+        required: true
     },
     firstDelivery: {
         type: String,
-        required:true
+        required: true
     },
     lastDelivery: {
         type: String,
-        require:true
+        require: true
+    },
+    returnTime: {
+        type: String,
+        require: true
     },
     endTime: {
         type: String,
-        required:true,
+        required: true,
     },
     workingHours: {
         type: String,
+    },
+    packages: {
+        type: Number,
+        required: true,
+    },
+    returnedPackages: {
+        type: Number,
+        default: 0,
+    },
+    totalPackages: {
+        type: Number,
+        required: true,
     },
     slug: {
         type: String,

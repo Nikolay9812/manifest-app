@@ -2,7 +2,12 @@ import { Button, Spinner } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { CiClock2 } from "react-icons/ci";
-import { FaRoute } from "react-icons/fa6";
+import { MdOutlineFreeBreakfast, MdOutlineMapsHomeWork } from "react-icons/md";
+import { LuMapPin, LuPackage, LuPackageCheck, LuPackageX, LuUser } from "react-icons/lu";
+import { GiPathDistance } from "react-icons/gi";
+
+
+
 
 
 
@@ -69,26 +74,29 @@ export default function ManifestPage() {
         <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
           <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Tor</span>
           <div className="p-3 flex gap-2 justify-center items-center text-md">
-            <FaRoute className='text-gray-500' />
+            <LuMapPin />
             {manifest.tor}
           </div>
         </div>
         <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
-          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Company</span>
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Stantion</span>
           <div className="p-3 flex gap-2 justify-center items-center text-md">
-            <span className='text-sm'>Ivanov Transport</span>
+            <MdOutlineMapsHomeWork />
+            {manifest.stantion}
           </div>
         </div>
         <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
           <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Driver Name</span>
           <div className="p-3 flex gap-2 justify-center items-center text-md">
-            <p>In proggres</p>
+            <LuUser />
+            {manifest.driverName}
           </div>
         </div>
         <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
           <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Packages</span>
           <div className="p-3 flex gap-2 justify-center items-center text-md">
-            <p>In proggres</p>
+            <LuPackage />
+            {manifest.packages}
           </div>
         </div>
         <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
@@ -113,8 +121,7 @@ export default function ManifestPage() {
         <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
           <span className='w-full h-full text-sm text-center bg-gray-300 p-2  dark:text-gray-900 font-semibold'>Starting kilometers</span>
           <div className="p-3 flex gap-2 justify-center items-center text-md">
-            {manifest.kmStart}
-            <span>km</span>
+            {manifest.kmStart + ' km'}
           </div>
         </div>
         <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
@@ -134,14 +141,14 @@ export default function ManifestPage() {
         <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
           <span className='w-full h-full text-sm text-center bg-gray-300 p-2  dark:text-gray-900 font-semibold'>Return time station</span>
           <div className="p-3 flex gap-2 justify-center items-center text-md">
-            <p>in proggres</p>
+            <CiClock2 />
+            {manifest.returnTime}
           </div>
         </div>
         <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
           <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Ending kilometers</span>
           <div className="p-3 flex gap-2 justify-center items-center text-md">
-            {manifest.kmEnd}
-            <span>km</span>
+            {manifest.kmEnd + ' km'}
           </div>
         </div>
         <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
@@ -161,7 +168,36 @@ export default function ManifestPage() {
         <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
           <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Return packages</span>
           <div className="p-3 flex gap-2 justify-center items-center text-md">
-          <p>in proggres</p>
+            <LuPackageX />
+            {manifest.returnedPackages}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Delivered packages</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <LuPackageCheck />
+            {manifest.totalPackages}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Total kilometers</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <GiPathDistance />
+            {manifest.totalKm + ' km'}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Working Hours</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <CiClock2 />
+            {manifest.workingHours}
+          </div>
+        </div>
+        <div className="w-[200px] flex flex-col items-center justify-center text-2xl border-2 border-gray-300">
+          <span className='w-full h-full p-2 text-sm text-center bg-gray-300  dark:text-gray-900 font-semibold'>Break</span>
+          <div className="p-3 flex gap-2 justify-center items-center text-md">
+            <MdOutlineFreeBreakfast />
+            {parseFloat(manifest.workingHours) <= 8.5 ? "30 min" : "45 min"}
           </div>
         </div>
       </div>
