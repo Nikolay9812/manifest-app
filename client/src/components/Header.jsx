@@ -82,6 +82,7 @@ export default function Header() {
           {theme === 'light' ? <FaSun /> : <FaMoon />}
         </Button>
         {currentUser ? (
+
           <Dropdown
             arrowIcon={false}
             inline

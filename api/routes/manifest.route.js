@@ -5,7 +5,7 @@ import { createManifest, getManifests, deleteManifest, updateManifest, getUserMa
 const router = express.Router()
 
 router.post('/create', verifyToken, createManifest)
-router.get('/getmanifests', getManifests)
+router.get('/getmanifests',verifyToken, getManifests)
 router.get('/getusermanifests',verifyToken, getUserManifests)
 router.delete('/deletemanifest/:manifestId/:userId', verifyToken, deleteManifest)
 router.put('/updatemanifest/:manifestId/:userId', verifyToken, updateManifest)

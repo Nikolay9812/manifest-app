@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 
 export default function UpdateManifest() {
   const [formData, setFormData] = useState({})
+  
   const [publishError, setPublishError] = useState(null)
 
   const { manifestId } = useParams()
@@ -22,7 +23,7 @@ export default function UpdateManifest() {
     useEffect(() => {
         try {
             const fetchManifest = async () => {
-                const res = await fetch(`/api/manifest/getmanifests?manifestId=${manifestId}`)
+                const res = await fetch(`/api/manifest/getmanifests`)
                 const data = await res.json()
 
                 if (!res.ok) {

@@ -45,8 +45,8 @@ export default function DashManifests() {
         }
     }, [currentUser._id])
 
-    
-    
+
+
 
     const handleShowMore = async () => {
         const startIndex = userManifests.length
@@ -118,7 +118,7 @@ export default function DashManifests() {
                             </Table.Head>
                             {userManifests.map((manifest) => (
                                 <Table.Body className='divide-y' key={manifest._id}>
-                                    <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                                    <Table.Row className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${manifest.returnedPackages !== 0 ? 'bg-red-100 dark:bg-red-900':''}`}>
                                         <Table.Cell>
                                             {manifest.username}
                                         </Table.Cell>
@@ -142,9 +142,9 @@ export default function DashManifests() {
                                             <p>{manifest.totalKm}</p>
                                         </Table.Cell>
                                         <Table.Cell>
-                                            <p>{ manifest.startTime}</p>
-                                            <p>{ manifest.endTime}</p>
-                                            <p>{ manifest.workingHours}</p>
+                                            <p>{manifest.startTime}</p>
+                                            <p>{manifest.endTime}</p>
+                                            <p>{manifest.workingHours}</p>
                                         </Table.Cell>
                                         <Table.Cell>
                                             <span
