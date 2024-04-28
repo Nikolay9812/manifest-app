@@ -23,10 +23,12 @@ const DashMonthTotals = () => {
     }, []);
 
     return (
-        <>
-            {userTotals.map((userData) => (
+        <div className='p-3 m-auto'>
+            {userTotals.length > 0 && userTotals.map((userData) => (
                 <div key={userData.userId}>
-                    <h2>User: {userData.username}</h2>
+                    <div className="p-3 m-auto">
+                        <h2>User: {userData.username}</h2>
+                    </div>
                     <Table hoverable className='shadow-md'>
                         <Table.Head>
                             <Table.HeadCell>Month</Table.HeadCell>
@@ -46,10 +48,17 @@ const DashMonthTotals = () => {
                                 </Table.Row>
                             </Table.Body>
                         ))}
+                        <div className="flex gap-6">
+                        <div>{userData.totalsByMonth.reduce((acc, curr) => acc + curr.totalHours, 0)}</div>
+                        <div>{userData.totalsByMonth.reduce((acc, curr) => acc + curr.totalKilometers, 0)}</div>
+                        <div>{userData.totalsByMonth.reduce((acc, curr) => acc + curr.totalPackages, 0)}</div>
+                        <div>{userData.totalsByMonth.reduce((acc, curr) => acc + curr.totalReturnedPackages, 0)}</div>
+                        </div>
+
                     </Table>
                 </div>
             ))}
-        </>
+        </div>
     );
 };
 
