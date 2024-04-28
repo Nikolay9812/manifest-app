@@ -40,7 +40,7 @@ const manifestSchema = new mongoose.Schema({
         type: Number,
     },
     startTime: {
-        type: String,
+        type: Date,
         required: true
     },
     departure: {
@@ -60,11 +60,11 @@ const manifestSchema = new mongoose.Schema({
         require: true
     },
     endTime: {
-        type: String,
+        type: Date,
         required: true,
     },
     workingHours: {
-        type: String,
+        type: Number,
     },
     packages: {
         type: Number,

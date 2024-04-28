@@ -8,9 +8,11 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux';
+import { formatTime, formatTimeForInput } from '../utils';
 
 export default function UpdateManifest() {
   const [formData, setFormData] = useState({})
+  console.log(formData);
   
   const [publishError, setPublishError] = useState(null)
 
@@ -18,12 +20,12 @@ export default function UpdateManifest() {
 
     const navigate = useNavigate()
 
-    const { currentUser } = useSelector((state) => state.user)
+  const { currentUser } = useSelector((state) => state.user)
 
     useEffect(() => {
         try {
             const fetchManifest = async () => {
-                const res = await fetch(`/api/manifest/getmanifests`)
+                const res = await fetch(`/api/manifest/getmanifests?manifestId=${manifestId}`)
                 const data = await res.json()
 
                 if (!res.ok) {
@@ -32,8 +34,12 @@ export default function UpdateManifest() {
                     return
                 }
                 if (res.ok) {
-                    setPublishError(null)
-                    setFormData(data.manifests[0])
+                  setPublishError(null)
+                    setFormData({
+                      ...data.manifests[0],
+                      startTime: formatTimeForInput(data.manifests[0].startTime),
+                      endTime: formatTimeForInput(data.manifests[0].endTime)
+                    });
                 }
             }
             fetchManifest()
@@ -42,45 +48,19 @@ export default function UpdateManifest() {
         }
     }, [manifestId])
 
-    const calculateWorkingHours = () => {
-      // Recalculate workingHours
-      const start = new Date(`01/01/2000 ${formData.startTime}`);
-      const end = new Date(`01/01/2000 ${formData.endTime}`);
-      let workingHours = (end - start) / (1000 * 60 * 60); // Convert milliseconds to hours
-  
-      // Subtract 30 minutes for the break
-      workingHours -= 0.5; // Subtract 30 minutes
-  
-      // Add 15 minutes if working hours exceed 8 hours and 30 minutes
-      if (workingHours > 8.5) { // More than 8 hours and 30 minutes
-          workingHours -= 0.25; // Subtract additional 15 minutes
-      }
-  
-      // Convert workingHours to hh:mm format
-      const hours = Math.floor(workingHours);
-      const minutes = Math.round((workingHours - hours) * 60);
-  
-      // Pad single digit hours and minutes with leading zeros
-      const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
-      const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-  
-      return `${formattedHours}:${formattedMinutes}`;
-  };
+    
   
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // Recalculate totalKm
-    const totalKm = formData.kmEnd - formData.kmStart;
-
-    // Calculate working hours in hh:mm format
-    const workingHours = calculateWorkingHours();
+    const startTime = formatTime(formData.startTime);
+    const endTime = formatTime(formData.endTime);
 
     // Include recalculated fields in formData
     const updatedFormData = {
-        ...formData,
-        totalKm,
-        workingHours,
+      ...formData,
+      startTime,
+      endTime
     };
 
     try {
@@ -106,7 +86,7 @@ export default function UpdateManifest() {
   }
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
-      <h1 className='text-center text-3xl my-7 font-semibold'>Create a Manifest</h1>
+      <h1 className='text-center text-3xl my-7 font-semibold'>Update a Manifest</h1>
       <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <Select

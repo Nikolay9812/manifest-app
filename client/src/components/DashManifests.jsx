@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux'
 import { Table, Modal, Button } from 'flowbite-react'
 import { Link } from 'react-router-dom'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
-
-
+import { formatHours } from '../utils'
 
 export default function DashManifests() {
     const { currentUser } = useSelector((state) => state.user)
@@ -12,7 +11,6 @@ export default function DashManifests() {
     const [showMore, setShowMore] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [manifestIdToDelete, setManifestIdToDelete] = useState('')
-    console.log(userManifests);
 
     useEffect(() => {
         const fetchManifests = async () => {
@@ -20,14 +18,13 @@ export default function DashManifests() {
                 const res = await fetch(`/api/manifest/getmanifests`)
                 const data = await res.json()
                 if (res.ok) {
-                    // Iterate through the fetched manifests and fetch the username for each user ID
                     const manifestsWithUsernames = await Promise.all(data.manifests.map(async (manifest) => {
-                        const userRes = await fetch(`/api/user/${manifest.userId}`) // Assuming an endpoint to fetch user details by ID
+                        const userRes = await fetch(`/api/user/${manifest.userId}`)
                         const userData = await userRes.json()
                         if (userRes.ok) {
                             return { ...manifest, username: userData.username }
                         } else {
-                            return { ...manifest, username: 'Unknown' } // Default username if fetching fails
+                            return { ...manifest, username: 'Unknown' }
                         }
                     }))
                     setUserManifests(manifestsWithUsernames)
@@ -44,9 +41,6 @@ export default function DashManifests() {
             fetchManifests()
         }
     }, [currentUser._id])
-
-
-
 
     const handleShowMore = async () => {
         const startIndex = userManifests.length
@@ -142,9 +136,9 @@ export default function DashManifests() {
                                             <p>{manifest.totalKm}</p>
                                         </Table.Cell>
                                         <Table.Cell>
-                                            <p>{manifest.startTime}</p>
-                                            <p>{manifest.endTime}</p>
-                                            <p>{manifest.workingHours}</p>
+                                            <p>{new Date(manifest.startTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
+                                            <p>{new Date(manifest.endTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
+                                            <p>{formatHours(manifest.workingHours)}</p>
                                         </Table.Cell>
                                         <Table.Cell>
                                             <span
