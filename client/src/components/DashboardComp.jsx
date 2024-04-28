@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom';
 
 export default function DashboardComp() {
   const [users, setUsers] = useState([]);
-  const [comments, setComments] = useState([]);
   const [posts, setPosts] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalPosts, setTotalPosts] = useState(0);
@@ -48,25 +47,12 @@ export default function DashboardComp() {
         console.log(error.message);
       }
     };
-    const fetchComments = async () => {
-      try {
-        const res = await fetch('/api/comment/getcomments?limit=5');
-        const data = await res.json();
-        if (res.ok) {
-          setComments(data.comments);
-          setTotalComments(data.totalComments);
-          setLastMonthComments(data.lastMonthComments);
-        }
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
     if (currentUser.isAdmin) {
       fetchUsers();
       fetchPosts();
-      fetchComments();
     }
   }, [currentUser]);
+
   return (
     <div className='p-3 md:mx-auto'>
       <div className='flex-wrap flex gap-4 justify-center'>
@@ -146,31 +132,10 @@ export default function DashboardComp() {
                       />
                     </Table.Cell>
                     <Table.Cell>{user.username}</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              ))}
-          </Table>
-        </div>
-        <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
-          <div className='flex justify-between  p-3 text-sm font-semibold'>
-            <h1 className='text-center p-2'>Recent comments</h1>
-            <Button outline gradientDuoTone='greenToBlue'>
-              <Link to={'/dashboard?tab=comments'}>See all</Link>
-            </Button>
-          </div>
-          <Table hoverable>
-            <Table.Head>
-              <Table.HeadCell>Comment content</Table.HeadCell>
-              <Table.HeadCell>Likes</Table.HeadCell>
-            </Table.Head>
-            {comments &&
-              comments.map((comment) => (
-                <Table.Body key={comment._id} className='divide-y'>
-                  <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='w-96'>
-                        <p className='line-clamp-2'>{comment.content}</p>
-                    </Table.Cell>
-                    <Table.Cell>{comment.numberOfLikes}</Table.Cell>
+                    <Table.Cell>{user.totalKilometers}</Table.Cell>
+                    <Table.Cell>{user.totalPackages}</Table.Cell>
+                    <Table.Cell>{user.totalReturnedPackages}</Table.Cell>
+                    <Table.Cell>{user.totalHours}</Table.Cell>
                   </Table.Row>
                 </Table.Body>
               ))}

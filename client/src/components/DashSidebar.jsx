@@ -79,6 +79,21 @@ export default function DashSidebar() {
                     {
                         
                         currentUser.isAdmin && (
+                            <Link to='/dashboard?tab=monthtotals'>
+                                <Sidebar.Item
+                                    active={tab === 'monthtotals'}
+                                    icon={HiDocumentText}
+                                    as='div'
+                                >
+                                    MonthTotals
+                                </Sidebar.Item>
+                            </Link>
+                        )
+                        
+                    }
+                    {
+                        
+                        currentUser.isAdmin && (
                             <Link to='/dashboard?tab=manifests'>
                                 <Sidebar.Item
                                     active={tab === 'manifests'}

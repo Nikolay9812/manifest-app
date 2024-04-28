@@ -1,6 +1,8 @@
 import bcryptjs from 'bcryptjs'
 import { errorHandler } from '../utils/error.js'
 import User from '../models/user.model.js'
+import Manifest from "../models/manifest.model.js"
+
 
 export const test = (req, res) => {
     res.json({ message: 'API is working' })
@@ -82,11 +84,6 @@ export const getUsers = async (req, res, next) => {
             .skip(startIndex)
             .limit(limit)
 
-        const usersWithoutPassword = users.map((user) => {
-            const { password, ...rest } = user._doc
-            return rest
-        })
-
         const totalUsers = await User.countDocuments()
 
         const now = new Date()
@@ -102,7 +99,7 @@ export const getUsers = async (req, res, next) => {
         })
 
         res.status(200).json({
-            users: usersWithoutPassword,
+            users,
             totalUsers,
             lastMonthUsers
         })
@@ -111,6 +108,7 @@ export const getUsers = async (req, res, next) => {
         next(error)
     }
 }
+
 
 export const getUser = async (req, res, next) => {
     try {

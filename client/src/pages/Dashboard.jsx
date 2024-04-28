@@ -6,6 +6,7 @@ import DashUsers from '../components/DashUsers'
 import DashboardComp from '../components/DashboardComp'
 import DashManifests from '../components/DashManifests'
 import DashUserManifests from '../components/DashUserManifests'
+import DashMonthTotals from '../components/DashMonthTotals'
 
 export default function Dashboard() {
   const location = useLocation()
@@ -33,6 +34,8 @@ export default function Dashboard() {
     {tab === 'manifests' && <DashManifests />}
     {/* Manifests */}
     {tab === 'manifestsUser' && <DashUserManifests />}
+    {/* MonthTotals */}
+    {tab === 'monthtotals' && <DashMonthTotals />}
     {/* Dashboard Comp */}
     {tab === 'dash' && <DashboardComp />}
   </div>
