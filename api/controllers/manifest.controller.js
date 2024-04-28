@@ -6,8 +6,8 @@ export const createManifest = async (req, res, next) => {
     try {
         const {
             packages,
-            returnedPackages,
             driverName,
+            returnedPackages,
             stantion,
             returnTime,
             plate,
@@ -111,11 +111,30 @@ export const getUserManifests = async (req, res, next) => {
             createdAt: { $gte: oneMonthAgo },
         })
 
+        // Calculate totals
+        let totalKm = 0;
+        let totalDelivered = 0;
+        let totalHours = 0;
+        let totalReturned = 0;
+
+        manifests.forEach(manifest => {
+            totalKm += manifest.totalKm || 0;
+            totalDelivered += manifest.packages || 0;
+            totalHours += manifest.workingHours || 0;
+            totalReturned += manifest.returnedPackages || 0;
+        });
+
         res.status(200).json({
             manifests,
             totalManifests,
-            lastMonthManifests
-        })
+            lastMonthManifests,
+            totals: {
+                totalKm,
+                totalDelivered,
+                totalHours,
+                totalReturned
+            }
+        });
     } catch (error) {
         next(error)
     }

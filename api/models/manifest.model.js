@@ -65,6 +65,7 @@ const manifestSchema = new mongoose.Schema({
     },
     workingHours: {
         type: Number,
+        required: true,
     },
     packages: {
         type: Number,

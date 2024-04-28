@@ -227,18 +227,6 @@ export default function DashProfile() {
                     disabled={loading || imageFileUploading}>
                     {loading ? 'Loading...' : 'Update'}
                 </Button>
-                {
-                    
-                        <Link to={'/create-manifest'}>
-                            <Button
-                                type='submit'
-                                gradientDuoTone='greenToBlue'
-                                className='w-full'>
-                                Create a Manifest
-                            </Button>
-                        </Link>
-                    
-                }
             </form>
             <div className="text-red-500 flex justify-between mt-5">
                 <span onClick={() => setShowModal(true)} className='cursor-pointer'>Delete Account</span>

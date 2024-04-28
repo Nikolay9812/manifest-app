@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Sidebar } from 'flowbite-react'
+import { Button, Sidebar } from 'flowbite-react'
 import { HiArrowSmRight, HiDocumentText, HiUser, HiOutlineUserGroup, HiAnnotation, HiChartPie } from 'react-icons/hi'
 import { Link, useLocation } from 'react-router-dom'
 import { signoutSuccess } from '../redux/user/userSlice'
@@ -116,6 +116,18 @@ export default function DashSidebar() {
                             </>
                         )
                     }
+                    {
+                    
+                    <Link to={'/create-manifest'}>
+                        <Button
+                            type='submit'
+                            gradientDuoTone='greenToBlue'
+                            className='w-full'>
+                            Create a Manifest
+                        </Button>
+                    </Link>
+                
+            } 
                     <Sidebar.Item icon={HiArrowSmRight} className='cursor-pointer' onClick={handleSignout}>
                         Sign Out
                     </Sidebar.Item>
