@@ -3,6 +3,15 @@ import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js"
 import bcryptjs from 'bcryptjs'
 
+export const getAllManifests = async (req, res, next) => { 
+    try {
+        const manifests = await Manifest.find();
+
+        res.status(200).json(manifests);
+    } catch (error) {
+        next(error)
+    }
+}
 export const createManifest = async (req, res, next) => {
     try {
         const {
