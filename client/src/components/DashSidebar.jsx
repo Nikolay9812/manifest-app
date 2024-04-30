@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Sidebar } from 'flowbite-react'
+import { BsTable } from "react-icons/bs";
+import { MdInfoOutline, MdOutlineBackupTable } from "react-icons/md";
+import { PiFilesThin } from "react-icons/pi";
 import { HiArrowSmRight, HiDocumentText, HiUser, HiOutlineUserGroup, HiAnnotation, HiChartPie } from 'react-icons/hi'
 import { Link, useLocation } from 'react-router-dom'
 import { signoutSuccess } from '../redux/user/userSlice'
@@ -82,7 +85,7 @@ export default function DashSidebar() {
                             <Link to='/dashboard?tab=monthtotals'>
                                 <Sidebar.Item
                                     active={tab === 'monthtotals'}
-                                    icon={HiDocumentText}
+                                    icon={PiFilesThin}
                                     as='div'
                                 >
                                     MonthTotals
@@ -97,7 +100,7 @@ export default function DashSidebar() {
                             <Link to='/dashboard?tab=table'>
                                 <Sidebar.Item
                                     active={tab === 'table'}
-                                    icon={HiDocumentText}
+                                    icon={BsTable}
                                     as='div'
                                 >
                                     Table
@@ -112,7 +115,7 @@ export default function DashSidebar() {
                             <Link to='/dashboard?tab=manifests'>
                                 <Sidebar.Item
                                     active={tab === 'manifests'}
-                                    icon={HiDocumentText}
+                                    icon={PiFilesThin}
                                     as='div'
                                 >
                                     AllManifests
@@ -134,13 +137,13 @@ export default function DashSidebar() {
                                         Users
                                     </Sidebar.Item>
                                 </Link>
-                                <Link to='/dashboard?tab=comments'>
+                                <Link to='/dashboard?tab=selection'>
                                     <Sidebar.Item
-                                        active={tab === 'comments'}
-                                        icon={HiAnnotation}
+                                        active={tab === 'selection'}
+                                        icon={MdOutlineBackupTable }
                                         as='div'
                                     >
-                                        Comments
+                                        Selection
                                     </Sidebar.Item>
                                 </Link>
                             </>

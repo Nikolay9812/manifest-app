@@ -61,6 +61,7 @@ export const createManifest = async (req, res, next) => {
             workingHours = 0;
         }
 
+
         // Generate slug
         const hashedId = bcryptjs.hashSync(req.user.id, 5);
         const slug = hashedId.split(' ').join('-').toLowerCase().replace(/[^a-zA-Z0-9-]/g, '');
@@ -310,6 +311,9 @@ export const updateManifest = async (req, res, next) => {
         if (workingHours < 0) {
             workingHours = 0;
         }
+
+        // workingHours = parseFloat(workingHours.toFixed(2)); it is triking with one minute
+
 
         const updatedManifest = await Manifest.findByIdAndUpdate(
             req.params.manifestId,

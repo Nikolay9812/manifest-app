@@ -4,6 +4,9 @@ import dotenv from 'dotenv'
 import userRoutes from './routes/user.route.js'
 import authRoutes from './routes/auth.route.js'
 import manifestRoutes from './routes/manifest.route.js'
+import stationRoutes from './routes/station.route.js'
+import plateRoutes from './routes/plate.route.js'
+import torRoutes from './routes/tor.route.js'
 import cookieParser from 'cookie-parser'
 
 dotenv.config()
@@ -24,6 +27,9 @@ app.listen(3000, () => {
 app.use('/api/user', userRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/manifest', manifestRoutes)
+app.use('/api/stantion', stationRoutes)
+app.use('/api/plate', plateRoutes)
+app.use('/api/tor', torRoutes)
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500

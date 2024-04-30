@@ -9,7 +9,6 @@ import { formatHours, formatTimeForInput } from '../utils';
 const DashTable = () => {
     const { currentUser } = useSelector((state) => state.user)
     const [userManifests, setUserManifests] = useState([])
-    console.log(userManifests);
 
     const [colDefs, setColDefs] = useState([
         { field: "driverName", rowGroup: true, hide: true },
@@ -21,13 +20,13 @@ const DashTable = () => {
         { field: "plate", },
         { field: "kmStart", },
         { field: "kmEnd", },
-        { field: "totalKm", aggFunc: "sum" },
+        { field: "totalKm",},
         { field: "startTime", },
         { field: "endTime", },
         { field: "workingHours", },
         { field: "packages", },
-        { field: "returnedPackages", aggFunc: "sum" },
-        { field: "totalPackages", aggFunc: "sum" },
+        { field: "returnedPackages",},
+        { field: "totalPackages",},
     ]);
 
     useEffect(() => {
