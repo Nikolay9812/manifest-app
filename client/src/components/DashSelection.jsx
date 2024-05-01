@@ -9,48 +9,56 @@ import {
 import { Button, Modal, Table } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { BsBuildingsFill } from "react-icons/bs";
+import { FaMapMarkedAlt, FaShuttleVan } from "react-icons/fa";
 
 export default function DashSelection() {
   const { currentUser } = useSelector((state) => state.user)
   const [stantions, setStantions] = useState([]);
+  const [plate, setPlate] = useState('');
+  const [tor, setTor] = useState('');
+  const [stantion, setStantion] = useState('');
   const [plates, setPlates] = useState([]);
   const [tors, setTors] = useState([]);
-  const [showModal, setShowModal] = useState(false)
+  const [showModalStantion, setShowModalStantion] = useState(false)
+  const [showModalPlate, setShowModalPlate] = useState(false)
+  const [showModalTor, setShowModalTor] = useState(false)
+  const [publishError, setPublishError] = useState(false)
 
 
   useEffect(() => {
     const fetchStantions = async () => {
-        try {
-            const res = await fetch(`/api/stantion/getstantions`)
-            const data = await res.json()
-          if (res.ok) {
-              setStantions(data)
-            }
-        } catch (error) {
-            console.log(error.message)
+      try {
+        const res = await fetch(`/api/stantion/getstantions`)
+        const data = await res.json()
+        if (res.ok) {
+          setStantions(data)
         }
+      } catch (error) {
+        console.log(error.message)
+      }
     }
     const fetchPlates = async () => {
-        try {
-            const res = await fetch(`/api/plate/getplates`)
-            const data = await res.json()
-          if (res.ok) {
-              setPlates(data)
-            }
-        } catch (error) {
-            console.log(error.message)
+      try {
+        const res = await fetch(`/api/plate/getplates`)
+        const data = await res.json()
+        if (res.ok) {
+          setPlates(data)
         }
+      } catch (error) {
+        console.log(error.message)
+      }
     }
     const fetchTors = async () => {
-        try {
-            const res = await fetch(`/api/tor/gettors`)
-            const data = await res.json()
-          if (res.ok) {
-              setTors(data)
-            }
-        } catch (error) {
-            console.log(error.message)
+      try {
+        const res = await fetch(`/api/tor/gettors`)
+        const data = await res.json()
+        if (res.ok) {
+          setTors(data)
         }
+      } catch (error) {
+        console.log(error.message)
+      }
     }
 
     if (currentUser.isAdmin) {
@@ -58,7 +66,93 @@ export default function DashSelection() {
       fetchPlates()
       fetchTors()
     }
-}, [currentUser._id])
+  }, [currentUser._id])
+
+  const handleSubmitStantion = async (e) => {
+    e.preventDefault();
+    try {
+      // Perform the necessary validation or data processing here before submission
+
+      const res = await fetch('/api/stantion/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({name:stantion}),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      }
+      if (res.ok) {
+        // Stantion created successfully, update the stantions state
+        setStantions([...stantions, data]); // Assuming the response contains the created stantion object
+        setShowModalStantion(false);
+        setPublishError('');
+        setStantion('')
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleSubmitTor = async (e) => {
+    e.preventDefault();
+    try {
+      // Perform the necessary validation or data processing here before submission
+
+      const res = await fetch('/api/tor/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({name:tor}),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      }
+      if (res.ok) {
+        // Tor created successfully, update the tors state
+        setTors([...tors, data]); // Assuming the response contains the created tor object
+        setShowModalTor(false);
+        setPublishError('');
+        setTor('')
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+
+  const handleSubmitPlate = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/plate/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: plate }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      }
+      if (res.ok) {
+        // Plate created successfully, update the plates state
+        setPlates([...plates, data]); // Assuming the response contains the created plate object
+        setShowModalPlate(false);
+        setPlate(''); // Clear the plate name input field
+        setPublishError('');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <div className='p-3 md:mx-auto'>
       <div className='flex-wrap flex gap-4 justify-center'>
@@ -117,8 +211,9 @@ export default function DashSelection() {
         <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between  p-3 text-sm font-semibold'>
             <h1 className='text-center p-2'>Recent vehicle</h1>
-            <Button outline gradientDuoTone='greenToBlue'>
-              <Link to={'/dashboard?tab=users'}>Add</Link>
+            <Button onClick={() =>
+              setShowModalPlate(true)} outline gradientDuoTone='greenToBlue'>
+              Add
             </Button>
           </div>
           <Table hoverable>
@@ -140,8 +235,10 @@ export default function DashSelection() {
         <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between  p-3 text-sm font-semibold'>
             <h1 className='text-center p-2'>Recent stantions</h1>
-            <Button outline gradientDuoTone='greenToBlue'>
-              <Link to={'/dashboard?tab=posts'}>Add</Link>
+            <Button outline gradientDuoTone='greenToBlue'
+              onClick={
+                () => setShowModalStantion(true)}>
+              Add
             </Button>
           </div>
           <Table hoverable>
@@ -165,8 +262,11 @@ export default function DashSelection() {
         <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between  p-3 text-sm font-semibold'>
             <h1 className='text-center p-2'>Recent tor's</h1>
-            <Button outline gradientDuoTone='greenToBlue'>
-              <Link to={'/dashboard?tab=posts'}>Add</Link>
+            <Button outline gradientDuoTone='greenToBlue'
+              onClick={
+                () => setShowModalTor(true)
+              }>
+              Add
             </Button>
           </div>
           <Table hoverable>
@@ -188,19 +288,55 @@ export default function DashSelection() {
           </Table>
         </div>
       </div>
-      <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
-                <Modal.Header />
-                <Modal.Body>
-                    <div className="text-center">
-                        <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
-                        <h3 className='mb-5 text-lg text-gray-500 dark:tet-gray-400'>Are you sure you want to delete this user?</h3>
-                        <div className="flex justify-center gap-4">
-                            <Button color='failure' onClick={0}>Yes, I'm sure</Button>
-                            <Button color='gray' onClick={() => setShowModal(false)}>No,cancel</Button>
-                        </div>
-                    </div>
-                </Modal.Body>
-            </Modal>
+      <Modal show={showModalTor} onClose={() => setShowModalTor(false)} popup size='md'>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <FaMapMarkedAlt className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
+            <h3 className='mb-5 text-lg text-gray-500 dark:tet-gray-400'>You want to add new tor?</h3>
+            <input type="text" value={tor} onChange={(e) => setTor(e.target.value)} placeholder="Enter Plate Name" />
+            {publishError && <p className="text-red-500">{publishError}</p>}
+            <div className="flex justify-center gap-4 mt-3">
+              <Button color='succes' onClick={handleSubmitTor}>Add Tor</Button>
+              <Button color='gray' onClick={() => setShowModalTor(false)}>Cancel</Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal show={showModalPlate} onClose={() => setShowModalPlate(false)} popup size='md'>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <FaShuttleVan  className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+            <h3 className="mb-5 text-lg text-gray-500 dark:tet-gray-400">You want to add new vehicle?</h3>
+            <input type="text" value={plate} onChange={(e) => setPlate(e.target.value)} placeholder="Enter Plate Name" />
+            {publishError && <p className="text-red-500">{publishError}</p>}
+            <div className="flex justify-center gap-4 mt-3">
+              <Button color="success" onClick={handleSubmitPlate}>
+                Add Plate
+              </Button>
+              <Button color="gray" onClick={() => setShowModalPlate(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal show={showModalStantion} onClose={() => setShowModalStantion(false)} popup size='md'>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <BsBuildingsFill  className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
+            <h3 className='mb-5 text-lg text-gray-500 dark:tet-gray-400'>You want to add new stantion?</h3>
+            <input type="text" value={stantion} onChange={(e) => setStantion(e.target.value)} placeholder="Enter Stantion Name" />
+            {publishError && <p className="text-red-500">{publishError}</p>}
+            <div className="flex justify-center gap-4 mt-3">
+              <Button color='succes' onClick={handleSubmitStantion}>Add Stantion</Button>
+              <Button color='gray' onClick={() => setShowModalStantion(false)}>Cancel</Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   )
 }

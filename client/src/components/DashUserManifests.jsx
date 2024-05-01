@@ -79,7 +79,7 @@ export default function DashManifests() {
                                 {totals.totalReturned}
                             </div>
                         </div>
-                    <Table hoverable className='shadow-md'>
+                    <Table hoverable className='shadow-md'></Table><Table hoverable className='shadow-md'>
                         <Table.Head>
                             <Table.HeadCell>Date updated</Table.HeadCell>
                             <Table.HeadCell>Manifest stantion</Table.HeadCell>

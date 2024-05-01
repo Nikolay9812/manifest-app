@@ -330,6 +330,9 @@ export const updateManifest = async (req, res, next) => {
                     firstDelivery: req.body.firstDelivery,
                     lastDelivery: req.body.lastDelivery,
                     endTime: req.body.endTime,
+                    returnTime:req.body.returnTime,
+                    packages:req.body.packages,
+                    returnedPackages:req.body.returnedPackages,
                     workingHours: workingHours
                 }
             }, { new: true }

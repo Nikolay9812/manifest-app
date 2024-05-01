@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -13,6 +13,9 @@ import { formatTime } from '../utils';
 export default function CreateManifest() {
   const [formData, setFormData] = useState({})
   const [publishError, setPublishError] = useState(null)
+  const [stantions, setStantions] = useState([]);
+  const [plates, setPlates] = useState([]);
+  const [tors, setTors] = useState([]);
 
   const { currentUser } = useSelector((state) => state.user)
 
@@ -53,6 +56,49 @@ export default function CreateManifest() {
       setPublishError('Something went wrong')
     }
   }
+
+  useEffect(() => {
+    const fetchStantions = async () => {
+      try {
+        const res = await fetch(`/api/stantion/getstantions`)
+        const data = await res.json()
+        if (res.ok) {
+          setStantions(data)
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+    const fetchPlates = async () => {
+      try {
+        const res = await fetch(`/api/plate/getplates`)
+        const data = await res.json()
+        if (res.ok) {
+          setPlates(data)
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+    const fetchTors = async () => {
+      try {
+        const res = await fetch(`/api/tor/gettors`)
+        const data = await res.json()
+        if (res.ok) {
+          setTors(data)
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+
+    if (currentUser.isAdmin) {
+      fetchStantions()
+      fetchPlates()
+      fetchTors()
+    }
+  }, [currentUser._id])
+
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
       <h1 className='text-center text-3xl my-7 font-semibold'>Create a Manifest</h1>
@@ -61,76 +107,85 @@ export default function CreateManifest() {
           <Select
             onChange={(e) =>
               setFormData({ ...formData, stantion: e.target.value })}
-          >
+              >
             <option value="uncategorized">Select a stantion</option>
-            <option value="DBW1">DBW1</option>
-            <option value="DHE6">DHE6</option>
-            <option value="HBW3">HBW3</option>
+            {stantions.map(stantion => (
+              <option key={stantion._id} value={stantion.name}>{stantion.name}</option>
+            ))}
           </Select>
           <Select
             onChange={(e) =>
               setFormData({ ...formData, plate: e.target.value })}
-          >
+              >
             <option value="uncategorized">Select a plate</option>
-            <option value="AZ ZP 13">AZ ZP 13</option>
-            <option value="AZ ZP 33">AZ ZP 33</option>
-            <option value="F ZP 31">F ZP 31</option>
+            {plates.map(plate => (
+              <option key={plate._id} value={plate.name}>{plate.name}</option>
+            ))}
           </Select>
           <Select
-            onChange={(e) =>
-              setFormData({ ...formData, tor: e.target.value })}
-          >
+            onChange={(e) => setFormData({ ...formData, tor: e.target.value })}
+            >
             <option value="uncategorized">Select a tor</option>
-            <option value="ONE_1">ONE_1</option>
-            <option value="CA_A3">CA_A3</option>
-            <option value="ONE_9">ONE_9</option>
+            {tors.map(tor => (
+              <option key={tor._id} value={tor.name}>{tor.name}</option>
+            ))}
           </Select>
         </div>
+        <i>Starting kilometers</i>
         <TextInput
           type='number'
           onChange={(e) =>
             setFormData({ ...formData, kmStart: e.target.value })}
         />
+        <i>Ending kilometers</i>
         <TextInput
           type='number'
           onChange={(e) =>
             setFormData({ ...formData, kmEnd: e.target.value })}
         />
+        <i>Handover time handled</i>
         <TextInput
           type='time'
           onChange={(e) =>
             setFormData({ ...formData, startTime: e.target.value })}
         />
+        <i>Departure time stantion</i>
         <TextInput
           type='time'
           onChange={(e) =>
             setFormData({ ...formData, departure: e.target.value })}
         />
+        <i>Time of first delivery</i>
         <TextInput
           type='time'
           onChange={(e) =>
             setFormData({ ...formData, firstDelivery: e.target.value })}
         />
+        <i>Time of last delivery</i>
         <TextInput
           type='time'
           onChange={(e) =>
             setFormData({ ...formData, lastDelivery: e.target.value })}
         />
+        <i>Return time stantion</i>
         <TextInput
           type='time'
           onChange={(e) =>
             setFormData({ ...formData, returnTime: e.target.value })}
         />
+        <i>Time of complete debrief</i>
         <TextInput
           type='time'
           onChange={(e) =>
             setFormData({ ...formData, endTime: e.target.value })}
         />
+        <i>Packages</i>
         <TextInput
           type='number'
           onChange={(e) =>
             setFormData({ ...formData, packages: e.target.value })}
         />
+        <i>Returned packages</i>
         <TextInput
           type='number'
           onChange={(e) =>

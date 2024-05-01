@@ -6,6 +6,9 @@ export const formatTimeForInput = (timeString) => {
 };
   
 export const formatTime = (timeString) => {
+  if (!timeString) {
+    return null;
+  }
   // Assuming timeString is in "HH:mm" format
   const [hours, minutes] = timeString.split(':');
   return new Date(0, 0, 0, hours, minutes); // Create a Date object with today's date and specified time

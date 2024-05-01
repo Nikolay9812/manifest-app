@@ -12,44 +12,82 @@ import { formatTime, formatTimeForInput } from '../utils';
 
 export default function UpdateManifest() {
   const [formData, setFormData] = useState({})
-  console.log(formData);
-  
+  const [stantions, setStantions] = useState([]);
+  const [plates, setPlates] = useState([]);
+  const [tors, setTors] = useState([]);
+
   const [publishError, setPublishError] = useState(null)
 
   const { manifestId } = useParams()
 
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const { currentUser } = useSelector((state) => state.user)
 
-    useEffect(() => {
-        try {
-            const fetchManifest = async () => {
-                const res = await fetch(`/api/manifest/getmanifests?manifestId=${manifestId}`)
-                const data = await res.json()
+  useEffect(() => {
+    try {
+      const fetchManifest = async () => {
+        const res = await fetch(`/api/manifest/getmanifests?manifestId=${manifestId}`)
+        const data = await res.json()
 
-                if (!res.ok) {
-                    console.log(data.message)
-                    setPublishError(data.message)
-                    return
-                }
-                if (res.ok) {
-                  setPublishError(null)
-                    setFormData({
-                      ...data.manifests[0],
-                      startTime: formatTimeForInput(data.manifests[0].startTime),
-                      endTime: formatTimeForInput(data.manifests[0].endTime)
-                    });
-                }
-            }
-            fetchManifest()
-        } catch (error) {
-            console.log(error);
+        if (!res.ok) {
+          console.log(data.message)
+          setPublishError(data.message)
+          return
         }
-    }, [manifestId])
+        if (res.ok) {
+          setPublishError(null)
+          setFormData({
+            ...data.manifests[0],
+            startTime: formatTimeForInput(data.manifests[0].startTime),
+            endTime: formatTimeForInput(data.manifests[0].endTime)
+          });
+        }
+      }
+      const fetchStantions = async () => {
+        try {
+          const res = await fetch(`/api/stantion/getstantions`)
+          const data = await res.json()
+          if (res.ok) {
+            setStantions(data)
+          }
+        } catch (error) {
+          console.log(error.message)
+        }
+      }
+      const fetchPlates = async () => {
+        try {
+          const res = await fetch(`/api/plate/getplates`)
+          const data = await res.json()
+          if (res.ok) {
+            setPlates(data)
+          }
+        } catch (error) {
+          console.log(error.message)
+        }
+      }
+      const fetchTors = async () => {
+        try {
+          const res = await fetch(`/api/tor/gettors`)
+          const data = await res.json()
+          if (res.ok) {
+            setTors(data)
+          }
+        } catch (error) {
+          console.log(error.message)
+        }
+      }
+      fetchStantions()
+      fetchPlates()
+      fetchTors()
+      fetchManifest()
+    } catch (error) {
+      console.log(error);
+    }
+  }, [manifestId])
 
-    
-  
+
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -95,78 +133,106 @@ export default function UpdateManifest() {
             value={formData.stantion}
           >
             <option value="uncategorized">Select a stantion</option>
-            <option value="DBW1">DBW1</option>
-            <option value="DHE6">DHE6</option>
-            <option value="HBW3">HBW3</option>
+            {stantions.map(stantion => (
+              <option key={stantion._id} value={stantion.name}>{stantion.name}</option>
+            ))}
           </Select>
           <Select
             onChange={(e) =>
               setFormData({ ...formData, plate: e.target.value })}
-              value={formData.plate}
+            value={formData.plate}
           >
             <option value="uncategorized">Select a plate</option>
-            <option value="AZ ZP 13">AZ ZP 13</option>
-            <option value="AZ ZP 33">AZ ZP 33</option>
-            <option value="F ZP 31">F ZP 31</option>
+            {plates.map(plate => (
+              <option key={plate._id} value={plate.name}>{plate.name}</option>
+            ))}
           </Select>
           <Select
             onChange={(e) =>
               setFormData({ ...formData, tor: e.target.value })}
-              value={formData.tor}
+            value={formData.tor}
           >
             <option value="uncategorized">Select a tor</option>
-            <option value="ONE_1">ONE_1</option>
-            <option value="CA_A3">CA_A3</option>
-            <option value="ONE_9">ONE_9</option>
+            {tors.map(tor => (
+              <option key={tor._id} value={tor.name}>{tor.name}</option>
+            ))}
           </Select>
         </div>
+        <i>Starting kilometers</i>
         <TextInput
           type='number'
           onChange={(e) =>
             setFormData({ ...formData, kmStart: e.target.value })}
-            value={formData.kmStart}
+          value={formData.kmStart}
         />
+        <i>Ending kilometers</i>
         <TextInput
           type='number'
           onChange={(e) =>
             setFormData({ ...formData, kmEnd: e.target.value })}
-            value={formData.kmEnd}
+          value={formData.kmEnd}
         />
+        <i>Handover time handled</i>
         <TextInput
           type='time'
           onChange={(e) =>
             setFormData({ ...formData, startTime: e.target.value })}
-            value={formData.startTime}
+          value={formData.startTime}
         />
+        <i>Departure time stantion</i>
         <TextInput
           type='time'
           onChange={(e) =>
             setFormData({ ...formData, departure: e.target.value })}
-            value={formData.departure}
+          value={formData.departure}
         />
+        <i>Time of first delivery</i>
         <TextInput
           type='time'
           onChange={(e) =>
             setFormData({ ...formData, firstDelivery: e.target.value })}
-            value={formData.firstDelivery}
+          value={formData.firstDelivery}
         />
+        <i>Time of last delivery</i>
         <TextInput
           type='time'
           onChange={(e) =>
             setFormData({ ...formData, lastDelivery: e.target.value })}
-            value={formData.lastDelivery}
+          value={formData.lastDelivery}
         />
+        <i>Return time stantion</i>
+        <TextInput
+          type='time'
+          onChange={(e) =>
+            setFormData({ ...formData, returnTime: e.target.value })}
+          value={formData.returnTime}
+        />
+        <i>Time of complete debrief</i>
         <TextInput
           type='time'
           onChange={(e) =>
             setFormData({ ...formData, endTime: e.target.value })}
-            value={formData.endTime}
+          value={formData.endTime}
+        />
+        <i>Packages</i>
+        <TextInput
+          type='number'
+          onChange={(e) =>
+            setFormData({ ...formData, packages: e.target.value })}
+          value={formData.packages}
+        />
+        <i>Returned packages</i>
+        <TextInput
+          type='number'
+          onChange={(e) =>
+            setFormData({ ...formData, returnedPackages: e.target.value })}
+          value={formData.returnedPackages}
         />
         <Button
           type='submit'
           gradientDuoTone='greenToBlue'
         >
-          Upload
+          Save
         </Button>
         {
           publishError &&
