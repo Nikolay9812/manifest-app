@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'flowbite-react';
-import { Link, useActionData } from 'react-router-dom';
+import { Link, useActionData, useAsyncError } from 'react-router-dom';
 import { CiClock2 } from "react-icons/ci";
 import { TbTruckDelivery } from "react-icons/tb";
 import { LuPackageCheck, LuPackageX } from "react-icons/lu";
@@ -11,6 +11,7 @@ export default function DashManifests() {
     const { currentUser } = useSelector((state) => state.user);
     const [userManifests, setUserManifests] = useState([]);
     const [showMore, setShowMore] = useState(true);
+    console.log(userManifests);
     const [totals, setTotals] = useState({
         totalKm: 0,
         totalDelivered: 0,

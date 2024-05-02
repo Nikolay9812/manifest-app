@@ -17,7 +17,7 @@ export const formatTime = (timeString) => {
 export const formatHours = (hours) => {
   const totalMinutes = hours * 60;
   const hoursPart = Math.floor(totalMinutes / 60);
-  const minutesPart = Math.floor(totalMinutes % 60);
+  const minutesPart = Math.round(totalMinutes % 60);
   return `${padZero(hoursPart)}:${padZero(minutesPart)}`;
 };
 

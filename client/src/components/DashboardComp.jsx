@@ -8,6 +8,8 @@ import {
 } from 'react-icons/hi';
 import { Button, Table } from 'flowbite-react';
 import { Link } from 'react-router-dom';
+import GridItem from './GridItem';
+import AreaChartComp from './AreaChartComp';
 
 export default function DashboardComp() {
   const [users, setUsers] = useState([]);
@@ -33,12 +35,12 @@ export default function DashboardComp() {
         console.log(error.message);
       }
     };
-    const fetchPosts = async () => {
+    const fetchManifests = async () => {
       try {
         const res = await fetch('/api/manifest/getmanifests?limit=5');
         const data = await res.json();
         if (res.ok) {
-          
+
           setPosts(data.manifests);
           setTotalPosts(data.totalManifests);
           setLastMonthPosts(data.lastMonthManifests);
@@ -49,7 +51,7 @@ export default function DashboardComp() {
     };
     if (currentUser.isAdmin) {
       fetchUsers();
-      fetchPosts();
+      fetchManifests();
     }
   }, [currentUser]);
 
@@ -167,6 +169,19 @@ export default function DashboardComp() {
                 </Table.Body>
               ))}
           </Table>
+        </div>
+      </div>
+      <div className="flex min-h-screen flex-col items-center justify-center px-4 md:px-8 xl:px-10 py-44">
+        <div className="grid xl:grid-cols-3 lg:grid-cols-2 w-full gap-10 max-w-[1400px]">
+          <GridItem title={'Area chart'}>
+            <AreaChartComp />
+          </GridItem>
+          <GridItem title={'Bar chart'}>
+
+          </GridItem>
+          <GridItem title={'Line chart'}>
+
+          </GridItem>
         </div>
       </div>
     </div>
