@@ -116,66 +116,6 @@ export const createManifest = async (req, res, next) => {
     }
 };
 
-
-// Controller function to aggregate totals by month
-export const aggregateTotalsByMonth = async (req, res, next) => {
-    try {
-        const userId = req.user.id; // Get user ID from request
-
-        // Perform aggregation query
-        const aggregateResult = await Manifest.aggregate([
-            {
-                $match: { userId: userId } // Match manifests for a specific user
-            },
-            {
-                $group: {
-                    _id: { month: "$month", year: "$year" }, // Group by month and year
-                    totalKm: { $sum: "$totalKm" }, // Calculate total kilometers
-                    totalPackages: { $sum: "$packages" }, // Calculate total packages
-                    totalReturnedPackages: { $sum: "$returnedPackages" }, // Calculate total returned packages
-                    totalHours: { $sum: "$workingHours" } // Calculate total working hours
-                }
-            }
-        ]);
-
-        // Send the aggregated result as the response
-        res.status(200).json(aggregateResult);
-    } catch (error) {
-        // Handle errors
-        next(error);
-    }
-};
-export const aggregateTotalsByUser = async (req, res, next) => {
-    try {
-      const userTotals = await Manifest.aggregate([
-        {
-          $group: {
-            _id: '$userId',
-            username: { $first: '$driverName' }, // Assuming username is stored in the manifest document
-            totalsByMonth: {
-              $push: {
-                month: {
-                  $dateToString: { format: "%Y-%m", date: "$createdAt" } // Format month as string with month name
-                },
-                totalHours: { $sum: '$workingHours' },
-                totalKilometers: { $sum: '$totalKm' },
-                totalPackages: { $sum: '$packages' },
-                totalReturnedPackages: { $sum: '$returnedPackages' }
-              }
-            }
-          }
-        }
-      ]);
-  
-      res.json(userTotals);
-    } catch (error) {
-      next(error);
-    }
-  };
-  
-
-
-
 export const getUserManifests = async (req, res, next) => {
     try {
         const startIndex = parseInt(req.query.startIndex) || 0

@@ -11,7 +11,6 @@ export default function DashManifests() {
     const { currentUser } = useSelector((state) => state.user);
     const [userManifests, setUserManifests] = useState([]);
     const [showMore, setShowMore] = useState(true);
-    console.log(userManifests);
     const [totals, setTotals] = useState({
         totalKm: 0,
         totalDelivered: 0,

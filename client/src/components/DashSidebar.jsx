@@ -82,21 +82,6 @@ export default function DashSidebar() {
                     {
                         
                         currentUser.isAdmin && (
-                            <Link to='/dashboard?tab=monthtotals'>
-                                <Sidebar.Item
-                                    active={tab === 'monthtotals'}
-                                    icon={PiFilesThin}
-                                    as='div'
-                                >
-                                    MonthTotals
-                                </Sidebar.Item>
-                            </Link>
-                        )
-                        
-                    }
-                    {
-                        
-                        currentUser.isAdmin && (
                             <Link to='/dashboard?tab=table'>
                                 <Sidebar.Item
                                     active={tab === 'table'}
