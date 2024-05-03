@@ -91,6 +91,52 @@ export default function DashManifests() {
         }
     }
 
+    const handleApproveManifest = async (manifestId, currentStatus) => {
+        let newStatus = '';
+        switch (currentStatus) {
+            case 'inProgress':
+                newStatus = 'approved';
+                break;
+            case 'approved':
+                newStatus = 'disapproved';
+                break;
+            case 'disapproved':
+            default:
+                newStatus = 'inProgress';
+                break;
+        }
+
+        try {
+            const res = await fetch(`/api/manifest/approvemanifest/${manifestId}/${currentUser._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: newStatus }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                console.log(data.message);
+            } else {
+                setUserManifests((prev) =>
+                    prev.map((manifest) => {
+                        if (manifest._id === manifestId) {
+                            return { ...manifest, status: newStatus };
+                        }
+                        return manifest;
+                    })
+                );
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
+
+
+
     return (
         <div className='table-auto overflow-x-scroll md:mx-auto p-3 
     scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
@@ -109,12 +155,15 @@ export default function DashManifests() {
                                 <Table.HeadCell>
                                     <span>Edit</span>
                                 </Table.HeadCell>
+                                <Table.HeadCell>Status</Table.HeadCell>
                             </Table.Head>
                             {userManifests.map((manifest) => (
                                 <Table.Body className='divide-y' key={manifest._id}>
-                                    <Table.Row className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${manifest.returnedPackages !== 0 ? 'bg-red-100 dark:bg-red-900':''}`}>
+                                    <Table.Row className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${manifest.status === 'inProgress' ? 'bg-yellow-100 dark:bg-yellow-900' : manifest.status === 'approved' ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900'}`}>
                                         <Table.Cell>
-                                            {manifest.username}
+                                            <Link to={`/manifest/${manifest.slug}`}>
+                                                {manifest.username}
+                                            </Link>
                                         </Table.Cell>
                                         <Table.Cell>
                                             {new Date(manifest.updatedAt).toLocaleDateString()}
@@ -136,8 +185,8 @@ export default function DashManifests() {
                                             <p>{manifest.totalKm}</p>
                                         </Table.Cell>
                                         <Table.Cell>
-                                            <p>{new Date(manifest.startTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
-                                            <p>{new Date(manifest.endTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
+                                            <p>{new Date(manifest.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                            <p>{new Date(manifest.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                                             <p>{formatHours(manifest.workingHours)}</p>
                                         </Table.Cell>
                                         <Table.Cell>
@@ -156,6 +205,24 @@ export default function DashManifests() {
                                                     Edit
                                                 </span>
                                             </Link>
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <span
+                                                onClick={() => handleApproveManifest(manifest._id, manifest.status)}
+                                                className={`font-medium ${manifest.status === 'inProgress'
+                                                        ? 'text-yellow-500'
+                                                        : manifest.status === 'approved'
+                                                            ? 'text-green-500'
+                                                            : 'text-red-500'
+                                                    } hover:underline cursor-pointer`}
+                                            >
+                                                {manifest.status === 'inProgress'
+                                                    ? 'Approve'
+                                                    : manifest.status === 'approved'
+                                                        ? 'Approved'
+                                                        : 'Disapprove'}
+                                            </span>
+
                                         </Table.Cell>
                                     </Table.Row>
                                 </Table.Body>

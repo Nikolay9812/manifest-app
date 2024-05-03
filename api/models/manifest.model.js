@@ -83,6 +83,10 @@ const manifestSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },status: {
+        type: String,
+        enum: ['inProgress', 'approved', 'disapproved'],
+        default: 'inProgress'
     }
 }, { timestamps: true })
 

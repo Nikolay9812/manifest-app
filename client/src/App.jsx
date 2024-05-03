@@ -13,6 +13,7 @@ import CreateManifest from './pages/CreateManifest'
 import UpdateManifest from './pages/UpdateManifest'
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute'
 import ManifestPage from './pages/ManifestPage'
+import Search from './pages/Search'
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         <Route element={<PrivateRoute />}>
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/create-manifest' element={<CreateManifest />} />
+          <Route path='/search' element={<Search />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path='/create-manifest' element={<CreateManifest />} />

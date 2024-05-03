@@ -85,34 +85,34 @@ const DashTable = () => {
     };
 
     const generatePDF = async () => {
-        const input = document.getElementById('manifest-table');
-    
-        // Calculate the width of the table
-        const { clientWidth } = input;
-    
-        // Create a canvas with dimensions matching the table width but a fixed height
-        const canvas = await html2canvas(input, { width: clientWidth, height: clientWidth * 1.3 }); // Adjust the aspect ratio as needed
-    
-        // Set the width and height of the PDF page based on the table width
-        const pdfWidth = 210; // A4 paper width in mm
-        const pdfHeight = pdfWidth * 1.3; // Adjust the aspect ratio as needed
-    
-        // Convert the canvas to image data
-        const imgData = canvas.toDataURL('image/png');
-    
-        // Create a new PDF document with adjusted dimensions
-        const pdf = new jsPDF({
-            unit: 'mm',
-            format: [pdfWidth, pdfHeight], // Set the dimensions
-        });
-    
-        // Add the image to the PDF
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    
-        // Save the PDF
-        pdf.save('manifests.pdf');
-    };
-    
+    const input = document.getElementById('manifest-table');
+
+    // Calculate the width of the table
+    const { clientWidth } = input;
+
+    // Create a canvas with dimensions matching the table width but a fixed height
+    const canvas = await html2canvas(input, { width: clientWidth, height: clientWidth * 1.3 }); // Adjust the aspect ratio as needed
+
+    // Set the width and height of the PDF page based on the table width
+    const pdfWidth = 210; // A4 paper width in mm
+    const pdfHeight = pdfWidth * 1.3; // Adjust the aspect ratio as needed
+
+    // Convert the canvas to image data
+    const imgData = canvas.toDataURL('image/png');
+
+    // Create a new PDF document with adjusted dimensions
+    const pdf = new jsPDF({
+        unit: 'mm',
+        format: [pdfWidth, pdfHeight], // Set the dimensions
+    });
+
+    // Add the image to the PDF
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+    // Save the PDF
+    pdf.save('manifests.pdf');
+};
+
 
     return (
         <div className='p-3 relative overflow-x-auto shadow-md sm:rounded-lg'>

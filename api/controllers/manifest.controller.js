@@ -28,7 +28,8 @@ export const createManifest = async (req, res, next) => {
             departure,
             firstDelivery,
             lastDelivery,
-            endTime
+            endTime,
+            status
         } = req.body;
 
         // Check if required fields are present
@@ -92,7 +93,8 @@ export const createManifest = async (req, res, next) => {
             endTime,
             workingHours,
             month,
-            year
+            year,
+            status
         });
 
         // Save new manifest
@@ -183,6 +185,8 @@ export const getManifests = async (req, res, next) => {
                 $or: [
                     { plate: { $regex: req.query.searchTerm, $options: 'i' } },
                     { tor: { $regex: req.query.searchTerm, $options: 'i' } },
+                    { stantion: { $regex: req.query.searchTerm, $options: 'i' } },
+                    { driverName: { $regex: req.query.searchTerm, $options: 'i' } },
                 ]
             }),
         }).sort({ updatedAt: sortDirection }).skip(startIndex).limit(limit).populate('user', 'username')
@@ -272,7 +276,8 @@ export const updateManifest = async (req, res, next) => {
                     endTime: req.body.endTime,
                     returnTime:req.body.returnTime,
                     packages:req.body.packages,
-                    returnedPackages:req.body.returnedPackages,
+                    returnedPackages: req.body.returnedPackages,
+                    totalPackages:totalPackages,
                     workingHours: workingHours
                 }
             }, { new: true }
@@ -282,3 +287,36 @@ export const updateManifest = async (req, res, next) => {
         next(error)
     }
 }
+
+export const approveManifest = async (req, res, next) => {
+    try {
+        // Authorization check
+        if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+            return next(errorHandler(403, 'You are not allowed to update this manifest'));
+        }
+
+        // Extract the new status from the request body
+        const { status } = req.body;
+
+        // Validate that the status is one of the allowed values
+        if (!['inProgress', 'approved', 'disapproved'].includes(status)) {
+            return next(errorHandler(400, 'Invalid status'));
+        }
+
+        // Update manifest status
+        const updatedManifest = await Manifest.findByIdAndUpdate(
+            req.params.manifestId,
+            { status },
+            { new: true }
+        );
+
+        // Error handling and response
+        if (!updatedManifest) {
+            return next(errorHandler(404, 'Manifest not found'));
+        }
+        res.status(200).json(updatedManifest);
+    } catch (error) {
+        next(error);
+    }
+};
+
