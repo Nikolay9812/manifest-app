@@ -83,7 +83,7 @@ export default function DashManifests() {
                         <Table.Head>
                             <Table.HeadCell>Date updated</Table.HeadCell>
                             <Table.HeadCell>Manifest stantion</Table.HeadCell>
-                            <Table.HeadCell>Manifest plate</Table.HeadCell>
+                            <Table.HeadCell>Manifest packages</Table.HeadCell>
                             <Table.HeadCell>Manifest Km</Table.HeadCell>
                             <Table.HeadCell>Manifest hours</Table.HeadCell>
                         </Table.Head>
@@ -99,11 +99,14 @@ export default function DashManifests() {
                                         <Link to={`/manifest/${manifest.slug}`}>
                                             <h1>{manifest.stantion}</h1>
                                             <p>{manifest.tor}</p>
+                                            <p>{manifest.plate}</p>
                                         </Link>
                                     </Table.Cell>
                                     <Table.Cell>
                                         <Link  to={`/manifest/${manifest.slug}`}>
-                                            {manifest.plate}
+                                            <p>{manifest.packages}</p>
+                                            <p>{manifest.returnedPackages}</p>
+                                            <p>{manifest.totalPackages}</p>
                                         </Link>
                                     </Table.Cell>
                                     <Table.Cell>

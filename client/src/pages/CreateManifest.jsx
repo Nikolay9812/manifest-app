@@ -32,7 +32,6 @@ export default function CreateManifest() {
       ...formData,
       startTime,
       endTime,
-      driverName: currentUser.username,
     };
 
 

@@ -16,7 +16,6 @@ export const createManifest = async (req, res, next) => {
     try {
         const {
             packages,
-            driverName,
             returnedPackages,
             secondUserId,
             stantion,
@@ -51,7 +50,11 @@ export const createManifest = async (req, res, next) => {
         const totalKm = kmEnd - kmStart;
 
         // Calculate total packages
-        const totalPackages = packages - returnedPackages;
+        let totalPackages = packages; // Initialize totalPackages with the provided packages
+        if (returnedPackages > 0) {
+            // If returnedPackages is greater than 0, subtract it from totalPackages
+            totalPackages -= returnedPackages;
+        }
 
         // Calculate working hours
         const start = new Date(startTime);
@@ -89,7 +92,7 @@ export const createManifest = async (req, res, next) => {
             packages,
             totalPackages,
             returnTime,
-            driverName,
+            driverName:req.user.username,
             stantion,
             plate,
             tor,
@@ -112,16 +115,7 @@ export const createManifest = async (req, res, next) => {
         const savedManifest = await newManifest.save();
 
         // Update user's totals
-        const user = await User.findById(req.user.id);
-
-        // Update user's totals based on the new manifest
-        user.totalKilometers += totalKm;
-        user.totalPackages += totalPackages;
-        user.totalReturnedPackages += returnedPackages;
-        user.totalHours += workingHours;
-
-        // Save the updated user document
-        await user.save();
+        
 
         res.status(201).json(savedManifest);
     } catch (error) {
@@ -160,7 +154,7 @@ export const getUserManifests = async (req, res, next) => {
 
         manifests.forEach(manifest => {
             totalKm += manifest.totalKm || 0;
-            totalDelivered += manifest.packages || 0;
+            totalDelivered += manifest.totalPackages || 0;
             totalHours += manifest.workingHours || 0;
             totalReturned += manifest.returnedPackages || 0;
         });
