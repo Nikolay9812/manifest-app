@@ -16,6 +16,7 @@ export default function CreateManifest() {
   const [stantions, setStantions] = useState([]);
   const [plates, setPlates] = useState([]);
   const [tors, setTors] = useState([]);
+  const [users, setUsers] = useState([])
 
   const { currentUser } = useSelector((state) => state.user)
 
@@ -91,12 +92,26 @@ export default function CreateManifest() {
         console.log(error.message)
       }
     }
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch(`/api/user/getusers`)
+        const data = await res.json()
+        if (res.ok) {
+          setUsers(data.users)
+          if (data.users.length < 9) {
+            setShowMore(false)
+          }
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
 
-    if (currentUser.isAdmin) {
       fetchStantions()
       fetchPlates()
       fetchTors()
-    }
+      fetchUsers()
+    
   }, [currentUser._id])
 
   return (
@@ -107,7 +122,7 @@ export default function CreateManifest() {
           <Select
             onChange={(e) =>
               setFormData({ ...formData, stantion: e.target.value })}
-              >
+          >
             <option value="uncategorized">Select a stantion</option>
             {stantions.map(stantion => (
               <option key={stantion._id} value={stantion.name}>{stantion.name}</option>
@@ -116,7 +131,7 @@ export default function CreateManifest() {
           <Select
             onChange={(e) =>
               setFormData({ ...formData, plate: e.target.value })}
-              >
+          >
             <option value="uncategorized">Select a plate</option>
             {plates.map(plate => (
               <option key={plate._id} value={plate.name}>{plate.name}</option>
@@ -124,10 +139,18 @@ export default function CreateManifest() {
           </Select>
           <Select
             onChange={(e) => setFormData({ ...formData, tor: e.target.value })}
-            >
+          >
             <option value="uncategorized">Select a tor</option>
             {tors.map(tor => (
               <option key={tor._id} value={tor.name}>{tor.name}</option>
+            ))}
+          </Select>
+          <Select
+            onChange={(e) => setFormData({ ...formData, secondUserId: e.target.value })}
+          >
+            <option value="uncategorized">Select second driver</option>
+            {users.map(user => (
+              <option key={user._id} value={user._id}>{user.username}</option>
             ))}
           </Select>
         </div>

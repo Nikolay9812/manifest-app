@@ -18,6 +18,7 @@ export const createManifest = async (req, res, next) => {
             packages,
             driverName,
             returnedPackages,
+            secondUserId,
             stantion,
             returnTime,
             plate,
@@ -94,7 +95,8 @@ export const createManifest = async (req, res, next) => {
             workingHours,
             month,
             year,
-            status
+            status,
+            secondUserId
         });
 
         // Save new manifest
@@ -266,6 +268,7 @@ export const updateManifest = async (req, res, next) => {
                     stantion: req.body.stantion,
                     plate: req.body.plate,
                     tor: req.body.tor,
+                    secondUserId:req.body.secondUserId,
                     kmStart: req.body.kmStart,
                     kmEnd: req.body.kmEnd,
                     totalKm: totalKm,
@@ -277,7 +280,7 @@ export const updateManifest = async (req, res, next) => {
                     returnTime:req.body.returnTime,
                     packages:req.body.packages,
                     returnedPackages: req.body.returnedPackages,
-                    totalPackages:totalPackages,
+                    totalPackages: totalPackages,
                     workingHours: workingHours
                 }
             }, { new: true }

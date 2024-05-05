@@ -43,17 +43,6 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true }//This is for time of creation and time of update
 )
 
-userSchema.add({
-    monthlyTotals: [{
-        month: Number,
-        year: Number,
-        totalKm: Number,
-        totalPackages: Number,
-        totalReturnedPackages: Number,
-        totalHours: Number
-    }]
-});
-
 const User = mongoose.model('User', userSchema)
 
 export default User//This way we can use it in other places in our app
