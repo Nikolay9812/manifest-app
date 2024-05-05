@@ -98,9 +98,6 @@ export default function CreateManifest() {
         const data = await res.json()
         if (res.ok) {
           setUsers(data.users)
-          if (data.users.length < 9) {
-            setShowMore(false)
-          }
         }
       } catch (error) {
         console.log(error.message)

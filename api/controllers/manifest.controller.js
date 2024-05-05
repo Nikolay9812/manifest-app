@@ -38,6 +38,15 @@ export const createManifest = async (req, res, next) => {
             return next(errorHandler(400, 'Please provide all the required fields'));
         }
 
+        if (new Date(startTime) >= new Date(endTime)) {
+            return next(errorHandler(400, 'Start time must be before end time'));
+        }
+
+        // Check if kmEnd is greater than kmStart
+        if (kmEnd <= kmStart) {
+            return next(errorHandler(400, 'End kilometers must be greater than start kilometers'));
+        }
+
         // Calculate total kilometers
         const totalKm = kmEnd - kmStart;
 
@@ -233,7 +242,20 @@ export const updateManifest = async (req, res, next) => {
     if (!req.user.isAdmin || req.user.id !== req.params.userId) {
         return next(errorHandler(403, 'You are not allowed to update this manifest'))
     }
+
+    
     try {
+        // Check if startTime is before endTime
+        const { startTime, endTime, kmStart, kmEnd } = req.body;
+        if (new Date(startTime) >= new Date(endTime)) {
+            return next(errorHandler(400, 'Start time must be before end time'));
+        }
+
+        // Check if kmEnd is greater than kmStart
+        if (kmEnd <= kmStart) {
+            return next(errorHandler(400, 'End kilometers must be greater than start kilometers'));
+        }
+        
         const totalKm = req.body.kmEnd - req.body.kmStart;
 
         // Calculate total packages

@@ -11,7 +11,23 @@ import { useSelector } from 'react-redux';
 import { formatTime, formatTimeForInput } from '../utils';
 
 export default function UpdateManifest() {
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState({
+    stantion: '',
+    plate: '',
+    tor: '',
+    secondUserId: '',
+    kmStart: '',
+    kmEnd: '',
+    startTime: '',
+    departure: '',
+    firstDelivery: '',
+    lastDelivery: '',
+    returnTime: '',
+    endTime: '',
+    packages: '',
+    returnedPackages: ''
+  });
+  
   const [stantions, setStantions] = useState([]);
   const [plates, setPlates] = useState([]);
   const [tors, setTors] = useState([]);
@@ -85,9 +101,6 @@ export default function UpdateManifest() {
           const data = await res.json()
           if (res.ok) {
             setUsers(data.users)
-            if (data.users.length < 9) {
-              setShowMore(false)
-            }
           }
         } catch (error) {
           console.log(error.message)
