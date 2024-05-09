@@ -210,10 +210,10 @@ export default function DashManifests() {
                                             <span
                                                 onClick={() => handleApproveManifest(manifest._id, manifest.status)}
                                                 className={`font-medium ${manifest.status === 'inProgress'
-                                                        ? 'text-yellow-500'
-                                                        : manifest.status === 'approved'
-                                                            ? 'text-green-500'
-                                                            : 'text-red-500'
+                                                    ? 'text-yellow-500'
+                                                    : manifest.status === 'approved'
+                                                        ? 'text-green-500'
+                                                        : 'text-red-500'
                                                     } hover:underline cursor-pointer`}
                                             >
                                                 {manifest.status === 'inProgress'

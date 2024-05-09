@@ -166,11 +166,11 @@ export default function DashboardComp() {
                     <Table.Cell>
                       {manifest.driverName}
                     </Table.Cell>
-                    <Table.Cell className='w-96'>{manifest.stantion}</Table.Cell>
-                    <Table.Cell className='w-96'>{manifest.totalKm}</Table.Cell>
-                    <Table.Cell className='w-96'>{manifest.totalPackages}</Table.Cell>
-                    <Table.Cell className='w-96'>{manifest.returnedPackages}</Table.Cell>
-                    <Table.Cell className='w-5'>{formatHours(manifest.workingHours)}</Table.Cell>
+                    <Table.Cell className=''>{manifest.stantion}</Table.Cell>
+                    <Table.Cell className=''>{manifest.totalKm}</Table.Cell>
+                    <Table.Cell className=''>{manifest.totalPackages}</Table.Cell>
+                    <Table.Cell className=''>{manifest.returnedPackages}</Table.Cell>
+                    <Table.Cell className=''>{formatHours(manifest.workingHours)}</Table.Cell>
                   </Table.Row>
                 </Table.Body>
               ))}
