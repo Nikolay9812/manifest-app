@@ -37,3 +37,15 @@ export const getPlates = async (req, res, next) => {
         next(error)
     }
 };
+
+export const deletePlate = async (req, res, next) => {
+    if (!req.user.isAdmin && req.user.id !== req.params.plateId) {
+        return next(errorHandler(403, 'You are not allowed to delete this plate'))
+    }
+    try {
+        await Plate.findByIdAndDelete(req.params.plateId)
+        res.status(200).json('Plate has been deleted')
+    } catch (error) {
+        next(error)
+    }
+}

@@ -37,3 +37,15 @@ export const getTors = async (req, res, next) => {
         next(error)
     }
 };
+
+export const deleteTor = async (req, res, next) => {
+    if (!req.user.isAdmin && req.user.id !== req.params.torId) {
+        return next(errorHandler(403, 'You are not allowed to delete this tor'))
+    }
+    try {
+        await Tor.findByIdAndDelete(req.params.torId)
+        res.status(200).json('Tor has been deleted')
+    } catch (error) {
+        next(error)
+    }
+}

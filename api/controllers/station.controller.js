@@ -37,3 +37,15 @@ export const getStations = async (req, res, next) => {
         next(error)
     }
 };
+
+export const deleteStation = async (req, res, next) => {
+    if (!req.user.isAdmin && req.user.id !== req.params.stationId) {
+        return next(errorHandler(403, 'You are not allowed to delete this station'))
+    }
+    try {
+        await Station.findByIdAndDelete(req.params.stationId)
+        res.status(200).json('Station has been deleted')
+    } catch (error) {
+        next(error)
+    }
+}

@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { BsBuildingsFill } from "react-icons/bs";
 import { FaMapMarkedAlt, FaShuttleVan } from "react-icons/fa";
+import { LiaTrashAltSolid } from "react-icons/lia";
+
 
 export default function DashSelection() {
   const { currentUser } = useSelector((state) => state.user)
@@ -78,7 +80,7 @@ export default function DashSelection() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({name:stantion}),
+        body: JSON.stringify({ name: stantion }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -107,7 +109,7 @@ export default function DashSelection() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({name:tor}),
+        body: JSON.stringify({ name: tor }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -153,6 +155,64 @@ export default function DashSelection() {
       console.log(error.message);
     }
   };
+
+  const handleDeletePlate = async (plateId) => {
+    try {
+      const res = await fetch(`/api/plate/delete/${plateId}`, {
+        method: 'DELETE'
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        // Update the plates state
+        setPlates(prevPlates => prevPlates.filter(plate => plate._id !== plateId));
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleDeleteTor = async (torId) => {
+    try {
+      const res = await fetch(`/api/tor/delete/${torId}`, {
+        method: 'DELETE'
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        // Update the tors state
+        setTors(prevTors => prevTors.filter(tor => tor._id !== torId));
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleDeleteStation = async (stationId) => {
+    try {
+      const res = await fetch(`/api/stantion/delete/${stationId}`, {
+        method: 'DELETE'
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        // Update the stantions state
+        setStantions(prevStantions => prevStantions.filter(stantion => stantion._id !== stationId));
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className='p-3 md:mx-auto'>
       <div className='flex-wrap flex gap-4 justify-center'>
@@ -162,7 +222,7 @@ export default function DashSelection() {
               <h3 className='text-gray-500 text-md uppercase'>Total Vehicle</h3>
               <p className='text-2xl'>{plates.length}</p>
             </div>
-            <HiOutlineUserGroup className='bg-teal-600  text-white rounded-full text-5xl p-3 shadow-lg' />
+            <FaShuttleVan className='bg-teal-600  text-white rounded-full text-5xl p-3 shadow-lg' />
           </div>
           <div className='flex  gap-2 text-sm'>
             <span className='text-green-500 flex items-center'>
@@ -180,7 +240,7 @@ export default function DashSelection() {
               </h3>
               <p className='text-2xl'>{tors.length}</p>
             </div>
-            <HiAnnotation className='bg-indigo-600  text-white rounded-full text-5xl p-3 shadow-lg' />
+            <FaMapMarkedAlt className='bg-indigo-600  text-white rounded-full text-5xl p-3 shadow-lg' />
           </div>
           <div className='flex  gap-2 text-sm'>
             <span className='text-green-500 flex items-center'>
@@ -196,7 +256,7 @@ export default function DashSelection() {
               <h3 className='text-gray-500 text-md uppercase'>Total Stantions</h3>
               <p className='text-2xl'>{stantions.length}</p>
             </div>
-            <HiDocumentText className='bg-lime-600  text-white rounded-full text-5xl p-3 shadow-lg' />
+            <BsBuildingsFill className='bg-lime-600  text-white rounded-full text-5xl p-3 shadow-lg' />
           </div>
           <div className='flex  gap-2 text-sm'>
             <span className='text-green-500 flex items-center'>
@@ -219,7 +279,7 @@ export default function DashSelection() {
           <Table hoverable>
             <Table.Head>
               <Table.HeadCell>Date</Table.HeadCell>
-              <Table.HeadCell>Vehicle</Table.HeadCell>
+              <Table.HeadCell colSpan={2}>Vehicle</Table.HeadCell>
             </Table.Head>
             {plates &&
               plates.map((plate) => (
@@ -227,6 +287,10 @@ export default function DashSelection() {
                   <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell>{new Date(plate.createdAt).toLocaleDateString()}</Table.Cell>
                     <Table.Cell>{plate.name}</Table.Cell>
+                    <Table.Cell><LiaTrashAltSolid
+                      className='cursor-pointer'
+                      onClick={() => handleDeletePlate(plate._id)}
+                    /></Table.Cell>
                   </Table.Row>
                 </Table.Body>
               ))}
@@ -244,7 +308,7 @@ export default function DashSelection() {
           <Table hoverable>
             <Table.Head>
               <Table.HeadCell>Date</Table.HeadCell>
-              <Table.HeadCell>Stantion</Table.HeadCell>
+              <Table.HeadCell colSpan={2}>Stantion</Table.HeadCell>
             </Table.Head>
             {stantions &&
               stantions.map((stantion) => (
@@ -254,6 +318,11 @@ export default function DashSelection() {
                       {new Date(stantion.createdAt).toLocaleDateString()}
                     </Table.Cell>
                     <Table.Cell >{stantion.name}</Table.Cell>
+                    <Table.Cell ><LiaTrashAltSolid
+                      className='cursor-pointer'
+                      onClick={() => handleDeleteStation(stantion._id)}
+                    />
+                    </Table.Cell>
                   </Table.Row>
                 </Table.Body>
               ))}
@@ -272,7 +341,7 @@ export default function DashSelection() {
           <Table hoverable>
             <Table.Head>
               <Table.HeadCell>Date</Table.HeadCell>
-              <Table.HeadCell>Tor</Table.HeadCell>
+              <Table.HeadCell colSpan={2}>Tor</Table.HeadCell>
             </Table.Head>
             {tors &&
               tors.map((tor) => (
@@ -282,6 +351,10 @@ export default function DashSelection() {
                       {new Date(tor.createdAt).toLocaleDateString()}
                     </Table.Cell>
                     <Table.Cell>{tor.name}</Table.Cell>
+                    <Table.Cell><LiaTrashAltSolid
+                      className='cursor-pointer'
+                      onClick={() => handleDeleteTor(tor._id)}
+                    /></Table.Cell>
                   </Table.Row>
                 </Table.Body>
               ))}
@@ -307,7 +380,7 @@ export default function DashSelection() {
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
-            <FaShuttleVan  className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+            <FaShuttleVan className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
             <h3 className="mb-5 text-lg text-gray-500 dark:tet-gray-400">You want to add new vehicle?</h3>
             <input type="text" value={plate} onChange={(e) => setPlate(e.target.value)} placeholder="Enter Plate Name" />
             {publishError && <p className="text-red-500">{publishError}</p>}
@@ -326,7 +399,7 @@ export default function DashSelection() {
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
-            <BsBuildingsFill  className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
+            <BsBuildingsFill className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
             <h3 className='mb-5 text-lg text-gray-500 dark:tet-gray-400'>You want to add new stantion?</h3>
             <input type="text" value={stantion} onChange={(e) => setStantion(e.target.value)} placeholder="Enter Stantion Name" />
             {publishError && <p className="text-red-500">{publishError}</p>}
