@@ -129,9 +129,12 @@ export const getUserManifests = async (req, res, next) => {
         const limit = parseInt(req.query.limit) || 9
         const sortDirection = req.query.order === 'asc' ? 1 : -1
         const userId = req.user.id;
-        const manifests = await Manifest.find({ userId }).sort({ updatedAt: sortDirection }).skip(startIndex).limit(limit)
+        const manifests = await Manifest.find({ $or: [{ userId }, { secondUserId: userId }] })
+                                          .sort({ updatedAt: sortDirection })
+                                          .skip(startIndex)
+                                          .limit(limit)
 
-        const totalManifests = await Manifest.countDocuments({ userId })
+        const totalManifests = await Manifest.countDocuments({ $or: [{ userId }, { secondUserId: userId }] })
 
         const now = new Date()
 
@@ -142,7 +145,7 @@ export const getUserManifests = async (req, res, next) => {
         )
 
         const lastMonthManifests = await Manifest.countDocuments({
-            userId,
+            $or: [{ userId }, { secondUserId: userId }],
             createdAt: { $gte: oneMonthAgo },
         })
 
@@ -174,6 +177,7 @@ export const getUserManifests = async (req, res, next) => {
         next(error)
     }
 }
+
 
 
 export const getManifests = async (req, res, next) => {
