@@ -19,15 +19,42 @@ export default function DashManifests() {
                 const data = await res.json()
                 if (res.ok) {
                     const manifestsWithUsernames = await Promise.all(data.manifests.map(async (manifest) => {
-                        const userRes = await fetch(`/api/user/${manifest.userId}`)
-                        const userData = await userRes.json()
-                        if (userRes.ok) {
-                            return { ...manifest, username: userData.username }
+                        const userRes = await fetch(`/api/user/${manifest.userId}`);
+                        const userData = await userRes.json();
+
+                        // Initialize an empty object to store the updated manifest details
+                        let updatedManifest = {
+                            ...manifest,
+                            username: userData.username,
+                            profilePicture: userData.profilePicture // Assuming profilePicture is directly available in userData
+                        };
+
+                        if (!manifest.secondUserId) {
+                            // If secondUserId is not defined, set the second username as 'Unknown'
+                            updatedManifest.secondUsername = '';
+                            updatedManifest.secondProfilePicture = ''; // Assuming secondProfilePicture field in manifest
                         } else {
-                            return { ...manifest, username: 'Unknown' }
+                            // If secondUserId is defined, fetch the second user's username and profile picture
+                            const secondUserRes = await fetch(`/api/user/${manifest.secondUserId}`);
+                            const secondUserData = await secondUserRes.json();
+
+                            if (secondUserRes.ok) {
+                                updatedManifest.secondUsername = secondUserData.username;
+                                updatedManifest.secondProfilePicture = secondUserData.profilePicture; // Assuming profilePicture is directly available in secondUserData
+                            } else {
+                                updatedManifest.secondUsername = 'Unknown';
+                                updatedManifest.secondProfilePicture = ''; // Assuming secondProfilePicture field in manifest
+                            }
                         }
-                    }))
-                    setUserManifests(manifestsWithUsernames)
+
+                        return updatedManifest;
+                    }));
+
+                    setUserManifests(manifestsWithUsernames);
+
+
+                    setUserManifests(manifestsWithUsernames);
+
                     if (data.manifests.length < 9) {
                         setShowMore(false)
                     }
@@ -162,7 +189,22 @@ export default function DashManifests() {
                                     <Table.Row className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${manifest.status === 'inProgress' ? 'bg-yellow-100 dark:bg-yellow-900' : manifest.status === 'approved' ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900'}`}>
                                         <Table.Cell>
                                             <Link to={`/manifest/${manifest.slug}`}>
-                                                {manifest.username}
+                                                <div className="relative w-10 h-10">
+                                                    <div className="group">
+                                                        <img src={manifest.profilePicture} alt="" className='absolute w-full h-full rounded-full z-10 border-2 dark:border-slate-500 border-slate-300 transition-scale duration-300 hover:scale-150 hover:z-50' />
+                                                        <div className="absolute bottom-12 left-0 w-full dark:border-slate-500 border-slate-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                                                            <span className="text-xs text-gray-700 dark:text-gray-300 px-1">{manifest.username}</span>
+                                                        </div>
+                                                    </div>
+                                                    {manifest.secondUserId && manifest.secondProfilePicture &&
+                                                        <div className="group">
+                                                            <img src={manifest.secondProfilePicture} alt="" className='absolute w-full h-full rounded-full ml-4 border-2 dark:border-slate-600 border-slate-400 transition-scale duration-300 hover:scale-150 hover:z-50' />
+                                                            <div className="absolute bottom-12 left-[50px] w-full bg-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                                                                <span className="text-xs text-gray-700 dark:text-gray-300 px-1">{manifest.secondUsername}</span>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
                                             </Link>
                                         </Table.Cell>
                                         <Table.Cell>
