@@ -178,8 +178,6 @@ export const getUserManifests = async (req, res, next) => {
     }
 }
 
-
-
 export const getManifests = async (req, res, next) => {
     try {
         const startIndex = parseInt(req.query.startIndex) || 0

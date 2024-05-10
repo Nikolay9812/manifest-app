@@ -69,18 +69,8 @@ export default function DashSidebar() {
                             Profile
                         </Sidebar.Item>
                     </Link>
-                    <Link to='/dashboard?tab=manifestsUser'>
-                        <Sidebar.Item
-                            active={tab === 'manifestsUser'}
-                            icon={HiDocumentText}
-                            labelColor='dark'
-                            as='div'
-                        >
-                            Manifests
-                        </Sidebar.Item>
-                    </Link>
                     {
-                        
+
                         currentUser.isAdmin && (
                             <Link to='/dashboard?tab=table'>
                                 <Sidebar.Item
@@ -92,22 +82,22 @@ export default function DashSidebar() {
                                 </Sidebar.Item>
                             </Link>
                         )
-                        
+
                     }
                     {
-                        
-                        currentUser.isAdmin && (
-                            <Link to='/dashboard?tab=manifests'>
-                                <Sidebar.Item
-                                    active={tab === 'manifests'}
-                                    icon={PiFilesThin}
-                                    as='div'
-                                >
-                                    AllManifests
-                                </Sidebar.Item>
-                            </Link>
-                        )
-                        
+
+
+                        <Link to='/dashboard?tab=manifests'>
+                            <Sidebar.Item
+                                active={tab === 'manifests'}
+                                icon={PiFilesThin}
+                                as='div'
+                            >
+                                Manifests
+                            </Sidebar.Item>
+                        </Link>
+
+
                     }
                     {
                         currentUser.isAdmin && (
@@ -125,7 +115,7 @@ export default function DashSidebar() {
                                 <Link to='/dashboard?tab=selection'>
                                     <Sidebar.Item
                                         active={tab === 'selection'}
-                                        icon={MdOutlineBackupTable }
+                                        icon={MdOutlineBackupTable}
                                         as='div'
                                     >
                                         Selection
@@ -135,17 +125,17 @@ export default function DashSidebar() {
                         )
                     }
                     {
-                    
-                    <Link to={'/create-manifest'}>
-                        <Button
-                            type='submit'
-                            gradientDuoTone='greenToBlue'
-                            className='w-full'>
-                            Create a Manifest
-                        </Button>
-                    </Link>
-                
-            } 
+
+                        <Link to={'/create-manifest'}>
+                            <Button
+                                type='submit'
+                                gradientDuoTone='greenToBlue'
+                                className='w-full'>
+                                Create a Manifest
+                            </Button>
+                        </Link>
+
+                    }
                     <Sidebar.Item icon={HiArrowSmRight} className='cursor-pointer' onClick={handleSignout}>
                         Sign Out
                     </Sidebar.Item>

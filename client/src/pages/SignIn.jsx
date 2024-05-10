@@ -34,7 +34,7 @@ export default function SignIn() {
       }
       if (res.ok) {
         dispatch(signInSuccess(data))
-        navigate('/dashboard?tab=manifestsUser')
+        navigate('/dashboard?tab=manifests')
       }
     } catch (error) {
       dispatch(signInFailure(error.message))
