@@ -21,7 +21,6 @@ export default function DashboardComp() {
   const [lastMonthManifests, setLastMonthManifests] = useState(0);
   const [sortedUsersByDeliveredPackages, setSortedUsersByDeliveredPackages] = useState(null); // State to track the user with most returned packages
   const { currentUser } = useSelector((state) => state.user);
-  console.log(sortedUsersByDeliveredPackages);
   useEffect(() => {
     const fetchUsers = async () => {
       try {

@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js"
 import bcryptjs from 'bcryptjs'
 
-export const getAllManifests = async (req, res, next) => { 
+export const getAllManifests = async (req, res, next) => {
     try {
         const manifests = await Manifest.find();
 
@@ -92,7 +92,7 @@ export const createManifest = async (req, res, next) => {
             packages,
             totalPackages,
             returnTime,
-            driverName:req.user.username,
+            driverName: req.user.username,
             stantion,
             plate,
             tor,
@@ -115,7 +115,7 @@ export const createManifest = async (req, res, next) => {
         const savedManifest = await newManifest.save();
 
         // Update user's totals
-        
+
 
         res.status(201).json(savedManifest);
     } catch (error) {
@@ -130,9 +130,10 @@ export const getUserManifests = async (req, res, next) => {
         const sortDirection = req.query.order === 'asc' ? 1 : -1
         const userId = req.user.id;
         const manifests = await Manifest.find({ $or: [{ userId }, { secondUserId: userId }] })
-                                          .sort({ updatedAt: sortDirection })
-                                          .skip(startIndex)
-                                          .limit(limit)
+            .sort({ updatedAt: sortDirection })
+            .skip(startIndex)
+            .limit(limit)
+            .populate('user', 'username')
 
         const totalManifests = await Manifest.countDocuments({ $or: [{ userId }, { secondUserId: userId }] })
 
@@ -149,6 +150,19 @@ export const getUserManifests = async (req, res, next) => {
             createdAt: { $gte: oneMonthAgo },
         })
 
+        const manifestsWithUsers = await Promise.all(manifests.map(async (manifest) => {
+            const user = await User.findById(manifest.userId, 'username profilePicture');
+            const secondUser = manifest.secondUserId ? await User.findById(manifest.secondUserId, 'username profilePicture') : null;
+
+            return {
+                ...manifest.toObject(),
+                username: user ? user.username : 'Unknown',
+                profilePicture: user ? user.profilePicture : '',
+                secondUsername: secondUser ? secondUser.username : '',
+                secondProfilePicture: secondUser ? secondUser.profilePicture : ''
+            };
+        }));
+
         // Calculate totals
         let totalKm = 0;
         let totalDelivered = 0;
@@ -163,7 +177,7 @@ export const getUserManifests = async (req, res, next) => {
         });
 
         res.status(200).json({
-            manifests,
+            manifests:manifestsWithUsers,
             totalManifests,
             lastMonthManifests,
             totals: {
@@ -212,10 +226,23 @@ export const getManifests = async (req, res, next) => {
             createdAt: { $gte: oneMonthAgo },
         })
 
+        const manifestsWithUsers = await Promise.all(manifests.map(async (manifest) => {
+            const user = await User.findById(manifest.userId, 'username profilePicture');
+            const secondUser = manifest.secondUserId ? await User.findById(manifest.secondUserId, 'username profilePicture') : null;
+
+            return {
+                ...manifest.toObject(),
+                username: user ? user.username : 'Unknown',
+                profilePicture: user ? user.profilePicture : '',
+                secondUsername: secondUser ? secondUser.username : '',
+                secondProfilePicture: secondUser ? secondUser.profilePicture : ''
+            };
+        }));
+
         res.status(200).json({
-            manifests,
+            manifests: manifestsWithUsers,
             totalManifests,
-            lastMonthManifests
+            lastMonthManifests,
         })
     } catch (error) {
         next(error)
@@ -239,7 +266,7 @@ export const updateManifest = async (req, res, next) => {
         return next(errorHandler(403, 'You are not allowed to update this manifest'))
     }
 
-    
+
     try {
         // Check if startTime is before endTime
         const { startTime, endTime, kmStart, kmEnd } = req.body;
@@ -251,7 +278,7 @@ export const updateManifest = async (req, res, next) => {
         if (kmEnd <= kmStart) {
             return next(errorHandler(400, 'End kilometers must be greater than start kilometers'));
         }
-        
+
         const totalKm = req.body.kmEnd - req.body.kmStart;
 
         // Calculate total packages
@@ -286,7 +313,7 @@ export const updateManifest = async (req, res, next) => {
                     stantion: req.body.stantion,
                     plate: req.body.plate,
                     tor: req.body.tor,
-                    secondUserId:req.body.secondUserId,
+                    secondUserId: req.body.secondUserId,
                     kmStart: req.body.kmStart,
                     kmEnd: req.body.kmEnd,
                     totalKm: totalKm,
@@ -295,8 +322,8 @@ export const updateManifest = async (req, res, next) => {
                     firstDelivery: req.body.firstDelivery,
                     lastDelivery: req.body.lastDelivery,
                     endTime: req.body.endTime,
-                    returnTime:req.body.returnTime,
-                    packages:req.body.packages,
+                    returnTime: req.body.returnTime,
+                    packages: req.body.packages,
                     returnedPackages: req.body.returnedPackages,
                     totalPackages: totalPackages,
                     workingHours: workingHours

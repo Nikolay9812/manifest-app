@@ -36,36 +36,8 @@ export default function DashManifests() {
                 const res = await fetch(manifestsEndpoint);
                 const data = await res.json()
                 if (res.ok) {
-                    const manifestsWithUsernames = await Promise.all(data.manifests.map(async (manifest) => {
-                        const userRes = await fetch(`/api/user/${manifest.userId}`);
-                        const userData = await userRes.json();
 
-                        let updatedManifest = {
-                            ...manifest,
-                            username: userData.username,
-                            profilePicture: userData.profilePicture
-                        };
-
-                        if (!manifest.secondUserId) {
-                            updatedManifest.secondUsername = '';
-                            updatedManifest.secondProfilePicture = '';
-                        } else {
-                            const secondUserRes = await fetch(`/api/user/${manifest.secondUserId}`);
-                            const secondUserData = await secondUserRes.json();
-
-                            if (secondUserRes.ok) {
-                                updatedManifest.secondUsername = secondUserData.username;
-                                updatedManifest.secondProfilePicture = secondUserData.profilePicture;
-                            } else {
-                                updatedManifest.secondUsername = 'Unknown';
-                                updatedManifest.secondProfilePicture = '';
-                            }
-                        }
-
-                        return updatedManifest;
-                    }));
-
-                    setManifests(manifestsWithUsernames);
+                    setManifests(data.manifests);
                     setTotals(data.totals)
                     setLoading(false);
 
@@ -94,36 +66,9 @@ export default function DashManifests() {
             const data = await res.json();
 
             if (res.ok) {
-                const manifestsWithUsernames = await Promise.all(data.manifests.map(async (manifest) => {
-                    const userRes = await fetch(`/api/user/${manifest.userId}`);
-                    const userData = await userRes.json();
 
-                    let updatedManifest = {
-                        ...manifest,
-                        username: userData.username,
-                        profilePicture: userData.profilePicture
-                    };
-
-                    if (!manifest.secondUserId) {
-                        updatedManifest.secondUsername = '';
-                        updatedManifest.secondProfilePicture = '';
-                    } else {
-                        const secondUserRes = await fetch(`/api/user/${manifest.secondUserId}`);
-                        const secondUserData = await secondUserRes.json();
-
-                        if (secondUserRes.ok) {
-                            updatedManifest.secondUsername = secondUserData.username;
-                            updatedManifest.secondProfilePicture = secondUserData.profilePicture;
-                        } else {
-                            updatedManifest.secondUsername = 'Unknown';
-                            updatedManifest.secondProfilePicture = '';
-                        }
-                    }
-
-                    return updatedManifest;
-                }));
-
-                setManifests((prev) => [...prev, ...manifestsWithUsernames])
+                setManifests((prev) => [...prev, ...data.manifests])
+                
                 if (data.manifests.length < 9) {
                     setShowMore(false)
                 }
