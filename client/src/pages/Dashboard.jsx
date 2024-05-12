@@ -5,6 +5,7 @@ import DashProfile from '../components/DashProfile'
 import DashUsers from '../components/DashUsers'
 import DashboardComp from '../components/DashboardComp'
 import DashTable from '../components/DashTable'
+import DashCalendar from '../components/DashCalendar'
 import DashSelection from '../components/DashSelection'
 import DashManifests from '../components/DashManifest/DashManifest'
 
@@ -36,6 +37,8 @@ export default function Dashboard() {
     {tab === 'manifests' && <DashManifests />}
     {/* Selection */}
     {tab === 'selection' && <DashSelection />}
+    {/* Calendar */}
+    {tab === 'calendar' && <DashCalendar />}
     {/* Dashboard Comp */}
     {tab === 'dash' && <DashboardComp />}
   </div>

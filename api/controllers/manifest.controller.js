@@ -5,13 +5,32 @@ import bcryptjs from 'bcryptjs'
 
 export const getAllManifests = async (req, res, next) => {
     try {
-        const manifests = await Manifest.find();
+        const userId = req.user.id;
 
-        res.status(200).json(manifests);
+        const manifests = await Manifest.find({
+            $or: [{ userId }, { secondUserId: userId }],
+        }).populate('userId', 'username');
+
+        const manifestsWithUsers = await Promise.all(manifests.map(async (manifest) => {
+            const user = await User.findById(manifest.userId, 'username profilePicture');
+            const secondUser = manifest.secondUserId ? await User.findById(manifest.secondUserId, 'username profilePicture') : null;
+
+            return {
+                ...manifest.toObject(),
+                username: user ? user.username : 'Unknown',
+                profilePicture: user ? user.profilePicture : '',
+                secondUsername: secondUser ? secondUser.username : '',
+                secondProfilePicture: secondUser ? secondUser.profilePicture : ''
+            };
+        }));
+
+        res.status(200).json(manifestsWithUsers);
     } catch (error) {
-        next(error)
+        next(error);
     }
 }
+
+
 export const createManifest = async (req, res, next) => {
     try {
         const {
@@ -177,7 +196,7 @@ export const getUserManifests = async (req, res, next) => {
         });
 
         res.status(200).json({
-            manifests:manifestsWithUsers,
+            manifests: manifestsWithUsers,
             totalManifests,
             lastMonthManifests,
             totals: {

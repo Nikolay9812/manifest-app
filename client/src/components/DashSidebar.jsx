@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Sidebar } from 'flowbite-react'
-import { BsTable } from "react-icons/bs";
+import { BsCalendar, BsTable } from "react-icons/bs";
 import { MdInfoOutline, MdOutlineBackupTable } from "react-icons/md";
 import { PiFilesThin } from "react-icons/pi";
 import { HiArrowSmRight, HiDocumentText, HiUser, HiOutlineUserGroup, HiAnnotation, HiChartPie } from 'react-icons/hi'
@@ -79,6 +79,21 @@ export default function DashSidebar() {
                                     as='div'
                                 >
                                     Table
+                                </Sidebar.Item>
+                            </Link>
+                        )
+
+                    }
+                    {
+
+                        currentUser.isAdmin && (
+                            <Link to='/dashboard?tab=calendar'>
+                                <Sidebar.Item
+                                    active={tab === 'calendar'}
+                                    icon={BsCalendar}
+                                    as='div'
+                                >
+                                    Calendar
                                 </Sidebar.Item>
                             </Link>
                         )
