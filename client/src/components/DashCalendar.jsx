@@ -19,7 +19,9 @@ export default function DashCalendar() {
 
     const fetchManifests = async () => {
         try {
-            const response = await fetch(`/api/manifest/getallmanifests`);
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth() + 1; // Months are zero-based, so add 1
+            const response = await fetch(`/api/manifest/getallmanifests?year=${year}&month=${month}`);
             const data = await response.json();
             setManifests(data);
         } catch (error) {
@@ -56,21 +58,21 @@ export default function DashCalendar() {
                 <div key={manifest._id} className="flex flex-col items-center">
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{formatHours(manifest.workingHours)}</div>
                     <div className="relative w-10 h-10">
+                        <div className="group">
+                            <img src={manifest.profilePicture} alt="" className='absolute w-full h-full rounded-full z-10 border-2 dark:border-slate-500 border-slate-300 transition-scale duration-300 hover:scale-150 hover:z-50' />
+                            <div className="absolute bottom-12 left-0 w-full dark:border-slate-500 border-slate-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                                <span className="text-xs text-gray-700 dark:text-gray-300 px-1">{manifest.username}</span>
+                            </div>
+                        </div>
+                        {manifest.secondUserId && manifest.secondProfilePicture &&
                             <div className="group">
-                                <img src={manifest.profilePicture} alt="" className='absolute w-full h-full rounded-full z-10 border-2 dark:border-slate-500 border-slate-300 transition-scale duration-300 hover:scale-150 hover:z-50' />
-                                <div className="absolute bottom-12 left-0 w-full dark:border-slate-500 border-slate-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
-                                    <span className="text-xs text-gray-700 dark:text-gray-300 px-1">{manifest.username}</span>
+                                <img src={manifest.secondProfilePicture} alt="" className='absolute w-full h-full rounded-full ml-4 border-2 dark:border-slate-600 border-slate-400 transition-scale duration-300 hover:scale-150 hover:z-50' />
+                                <div className="absolute bottom-12 left-[50px] w-full bg-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                                    <span className="text-xs text-gray-700 dark:text-gray-300 px-1">{manifest.secondUsername}</span>
                                 </div>
                             </div>
-                            {manifest.secondUserId && manifest.secondProfilePicture &&
-                                <div className="group">
-                                    <img src={manifest.secondProfilePicture} alt="" className='absolute w-full h-full rounded-full ml-4 border-2 dark:border-slate-600 border-slate-400 transition-scale duration-300 hover:scale-150 hover:z-50' />
-                                    <div className="absolute bottom-12 left-[50px] w-full bg-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
-                                        <span className="text-xs text-gray-700 dark:text-gray-300 px-1">{manifest.secondUsername}</span>
-                                    </div>
-                                </div>
-                            }
-                        </div>
+                        }
+                    </div>
                 </div>
             ));
         } else {

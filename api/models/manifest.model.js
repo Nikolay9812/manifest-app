@@ -87,10 +87,16 @@ const manifestSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
-    },status: {
+    }, status: {
         type: String,
         enum: ['inProgress', 'approved', 'disapproved'],
         default: 'inProgress'
+    }, month: {
+        type: Number,
+        required: true
+    }, year: {
+        type: Number,
+        required: true
     }
 }, { timestamps: true })
 

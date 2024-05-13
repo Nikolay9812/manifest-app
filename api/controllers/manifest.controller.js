@@ -6,9 +6,13 @@ import bcryptjs from 'bcryptjs'
 export const getAllManifests = async (req, res, next) => {
     try {
         const userId = req.user.id;
+        const { month, year } = req.query;
 
+        // Query manifests for the specified month and year
         const manifests = await Manifest.find({
             $or: [{ userId }, { secondUserId: userId }],
+            month: parseInt(month), // Convert month to integer
+            year: parseInt(year) // Convert year to integer
         }).populate('userId', 'username');
 
         const manifestsWithUsers = await Promise.all(manifests.map(async (manifest) => {
@@ -323,7 +327,9 @@ export const updateManifest = async (req, res, next) => {
         }
 
         // workingHours = parseFloat(workingHours.toFixed(2)); it is triking with one minute
-
+        const now = new Date(req.body.createdAt);
+        const month = now.getMonth() + 1; // Months are 0-based (0 for January)
+        const year = now.getFullYear();
 
         const updatedManifest = await Manifest.findByIdAndUpdate(
             req.params.manifestId,
@@ -345,7 +351,9 @@ export const updateManifest = async (req, res, next) => {
                     packages: req.body.packages,
                     returnedPackages: req.body.returnedPackages,
                     totalPackages: totalPackages,
-                    workingHours: workingHours
+                    workingHours: workingHours,
+                    month,
+                    year,
                 }
             }, { new: true }
         )
