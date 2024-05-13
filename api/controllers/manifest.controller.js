@@ -28,7 +28,27 @@ export const getAllManifests = async (req, res, next) => {
             };
         }));
 
-        res.status(200).json(manifestsWithUsers);
+        // Calculate total hours for the month
+        let totalHours = 0;
+        manifestsWithUsers.forEach(manifest => {
+            totalHours += manifest.workingHours;
+        });
+        let totalKm = 0;
+        manifestsWithUsers.forEach(manifest => {
+            totalKm += manifest.totalKm;
+        });
+        let totalDelivered = 0;
+        manifestsWithUsers.forEach(manifest => {
+            totalDelivered += manifest.totalPackages;
+        });
+        let totalReturned = 0;
+        manifestsWithUsers.forEach(manifest => {
+            totalReturned += manifest.returnedPackages;
+        });
+
+        const totalManifests = manifests.length
+
+        res.status(200).json({ manifests: manifestsWithUsers, totalHours,totalKm,totalDelivered,totalReturned,totalManifests });
     } catch (error) {
         next(error);
     }

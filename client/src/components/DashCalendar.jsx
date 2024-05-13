@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { formatHours } from '../utils';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { TbTruckDelivery } from 'react-icons/tb';
+import { LuFiles, LuPackageCheck, LuPackageX } from 'react-icons/lu';
+import { CiClock2 } from 'react-icons/ci';
 
 export default function DashCalendar() {
-    // State to hold the current date
     const [currentDate, setCurrentDate] = useState(new Date());
     const [manifests, setManifests] = useState([]);
-    console.log(manifests);
-    const [totalHours, setTotalHours] = useState(0); // State to hold total hours for the current month
+    const [totalHours, setTotalHours] = useState(0);
+    const [totalKm, setTotalKm] = useState(0);
+    const [totalDelivered, setTotalDelivered] = useState(0);
+    const [totalReturned, setTotalReturned] = useState(0);
+    const [totalManifests, setTotalManifests] = useState(0);
 
     useEffect(() => {
         fetchManifests();
     }, [currentDate]); // Fetch manifests when currentDate changes
-
-    useEffect(() => {
-        calculateTotalHours(); // Calculate total hours whenever the month changes
-    }, [manifests]); // Calculate total hours whenever manifests change
 
     const fetchManifests = async () => {
         try {
@@ -23,23 +24,15 @@ export default function DashCalendar() {
             const month = currentDate.getMonth() + 1; // Months are zero-based, so add 1
             const response = await fetch(`/api/manifest/getallmanifests?year=${year}&month=${month}`);
             const data = await response.json();
-            setManifests(data);
+            setManifests(data.manifests);
+            setTotalManifests(data.totalManifests)
+            setTotalHours(data.totalHours)
+            setTotalKm(data.totalKm)
+            setTotalDelivered(data.totalDelivered)
+            setTotalReturned(data.totalReturned)
         } catch (error) {
             console.error('Error fetching manifests:', error);
         }
-    };
-
-    // Function to calculate total hours for the current month
-    const calculateTotalHours = () => {
-        const totalHoursForMonth = manifests.reduce((total, manifest) => {
-            const createdAtDate = new Date(manifest.createdAt);
-            if (createdAtDate.getFullYear() === currentDate.getFullYear() &&
-                createdAtDate.getMonth() === currentDate.getMonth()) {
-                return total + parseFloat(manifest.workingHours);
-            }
-            return total;
-        }, 0);
-        setTotalHours(totalHoursForMonth.toFixed(2)); // Set total hours for the month
     };
 
     // Function to get worked hours for a specific date
@@ -178,9 +171,28 @@ export default function DashCalendar() {
                 </div>
                 <MdKeyboardDoubleArrowRight className='cursor-pointer opacity-[1] transition-opacity duration-300 hover:opacity-[.2]' onClick={goToNextYear} />
             </div>
-            <div className="flex justify-center p-3 text-xl">
-                Total Hours: {formatHours(totalHours)}
+            <div className="flex justify-between gap-4 p-3 text-xl">
+            <div className="flex items-center gap-2">
+                <CiClock2 />
+                {formatHours(totalHours)}
             </div>
+            <div className="flex items-center gap-2">
+                <TbTruckDelivery />
+                {totalKm + ' km'}
+            </div>
+            <div className="flex items-center gap-2 text-green-500">
+                <LuPackageCheck />
+                {totalDelivered}
+            </div>
+            <div className="flex items-center gap-2 text-red-500">
+                <LuPackageX />
+                {totalReturned}
+            </div>
+            <div className="flex items-center gap-2 text-yellow-500">
+            <LuFiles />
+                {totalManifests}
+            </div>
+        </div>
             <div className="grid grid-cols-7 h-10 gap-1">
                 <div className="text-center uppercase font-medium text-xl dark:text-slate-500">mon</div>
                 <div className="text-center uppercase font-medium text-xl dark:text-slate-500">tue</div>
