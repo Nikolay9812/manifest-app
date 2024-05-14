@@ -5,7 +5,7 @@ import DashProfile from '../components/DashProfile'
 import DashUsers from '../components/DashUsers'
 import DashboardComp from '../components/DashboardComp'
 import DashTable from '../components/DashTable'
-import DashCalendar from '../components/DashCalendar'
+import DashCalendar from '../components/DashCalendar/DashCalendar'
 import DashSelection from '../components/DashSelection'
 import DashManifests from '../components/DashManifest/DashManifest'
 

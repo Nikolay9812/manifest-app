@@ -1,32 +1,17 @@
 import React from 'react';
-import { formatHours } from '../utils';
 
-export default function CalendarDay({ day, isCurrentMonth, manifests }) {
-    const dayNumber = day.getDate();
-    
-    // Filter manifests for the current day
-    const manifestsForDay = manifests.filter(manifest => {
-        const createdAtDate = new Date(manifest.createdAt);
-        return (
-            createdAtDate.getFullYear() === day.getFullYear() &&
-            createdAtDate.getMonth() === day.getMonth() &&
-            createdAtDate.getDate() === dayNumber
-        );
-    });
-
+const CalendarDay = ({ day, month, getWorkedHoursForDate }) => {
     return (
-        <div className={`text-center ${!isCurrentMonth ? 'text-gray-500' : ''} h-[150px]`}>
-            {dayNumber}
-            {isCurrentMonth && (
-                <div>
-                    {manifestsForDay.map(manifest => (
-                        <div key={manifest._id}>
-                            {formatHours(manifest.workingHours)}
-                            {/* Display other information from the manifest */}
-                        </div>
-                    ))}
+        <div className={`relative text-center ${month !== 'current' ? 'text-gray-500 border-2 border-gray-700' : 'bg-slate-400 dark:bg-gray-700/50 border-2 border-gray-500'} h-[150px]`}>
+            {month === 'current' && (
+                <div className='flex items-center justify-center h-full'>
+                    <div className="text-gray-400 absolute top-0 left-0 p-1">{day}</div>
+                    <div className='flex flex-col items-center justify-center'>{getWorkedHoursForDate(day)}</div>
                 </div>
             )}
+            {month !== 'current' && <div className="text-gray-500 absolute top-0 left-0 p-1">{day}</div>}
         </div>
     );
 }
+
+export default CalendarDay;
