@@ -86,17 +86,16 @@ export default function DashSidebar() {
                     }
                     {
 
-                        currentUser.isAdmin && (
-                            <Link to='/dashboard?tab=calendar'>
-                                <Sidebar.Item
-                                    active={tab === 'calendar'}
-                                    icon={BsCalendar}
-                                    as='div'
-                                >
-                                    Calendar
-                                </Sidebar.Item>
-                            </Link>
-                        )
+                        <Link to='/dashboard?tab=calendar'>
+                            <Sidebar.Item
+                                active={tab === 'calendar'}
+                                icon={BsCalendar}
+                                as='div'
+                            >
+                                Calendar
+                            </Sidebar.Item>
+                        </Link>
+
 
                     }
                     {
