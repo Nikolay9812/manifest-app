@@ -5,8 +5,8 @@ import bcryptjs from 'bcryptjs'
 
 export const getAllManifests = async (req, res, next) => {
     try {
-        const userId = req.user.id;
-        const { month, year } = req.query;
+        const { userId: queryUserId, month, year } = req.query;
+        const userId = queryUserId || req.user.id;
 
         // Query manifests for the specified month and year
         const manifests = await Manifest.find({
@@ -30,29 +30,24 @@ export const getAllManifests = async (req, res, next) => {
 
         // Calculate total hours for the month
         let totalHours = 0;
-        manifestsWithUsers.forEach(manifest => {
-            totalHours += manifest.workingHours;
-        });
         let totalKm = 0;
-        manifestsWithUsers.forEach(manifest => {
-            totalKm += manifest.totalKm;
-        });
         let totalDelivered = 0;
-        manifestsWithUsers.forEach(manifest => {
-            totalDelivered += manifest.totalPackages;
-        });
         let totalReturned = 0;
         manifestsWithUsers.forEach(manifest => {
+            totalHours += manifest.workingHours;
+            totalKm += manifest.totalKm;
+            totalDelivered += manifest.totalPackages;
             totalReturned += manifest.returnedPackages;
         });
 
-        const totalManifests = manifests.length
+        const totalManifests = manifests.length;
 
-        res.status(200).json({ manifests: manifestsWithUsers, totalHours,totalKm,totalDelivered,totalReturned,totalManifests });
+        res.status(200).json({ manifests: manifestsWithUsers, totalHours, totalKm, totalDelivered, totalReturned, totalManifests });
     } catch (error) {
         next(error);
     }
-}
+};
+
 
 
 export const createManifest = async (req, res, next) => {

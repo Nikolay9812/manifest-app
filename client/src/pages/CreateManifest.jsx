@@ -9,6 +9,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { formatTime } from '../utils';
+import UserSelector from '../components/DashCalendar/UserSelector';
 
 export default function CreateManifest() {
   const [formData, setFormData] = useState({})
@@ -19,6 +20,7 @@ export default function CreateManifest() {
   const [users, setUsers] = useState([])
 
   const { currentUser } = useSelector((state) => state.user)
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const navigate = useNavigate()
 
@@ -32,6 +34,7 @@ export default function CreateManifest() {
       ...formData,
       startTime,
       endTime,
+      userId: selectedUser,
     };
 
 
@@ -110,9 +113,14 @@ export default function CreateManifest() {
     
   }, [currentUser._id])
 
+  const handleUserSelect = (userId) => {
+    setSelectedUser(userId);
+};
+
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
       <h1 className='text-center text-3xl my-7 font-semibold'>Create a Manifest</h1>
+      <UserSelector onUserSelect={handleUserSelect} />
       <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <Select
