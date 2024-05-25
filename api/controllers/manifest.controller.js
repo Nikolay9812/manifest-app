@@ -67,7 +67,8 @@ export const createManifest = async (req, res, next) => {
             firstDelivery,
             lastDelivery,
             endTime,
-            status
+            status,
+            userId // Add userId to the destructuring
         } = req.body;
 
         // Check if required fields are present
@@ -113,9 +114,14 @@ export const createManifest = async (req, res, next) => {
             workingHours = 0;
         }
 
+        // Determine the userId: if the user is an admin and provided a userId, use that; otherwise, use req.user.id
+        const actualUserId = req.user.isAdmin && userId ? userId : req.user.id;
+
+        const selectedUser = await User.findById(actualUserId); // Assuming you have a User model
+        const driverName = selectedUser.username;
 
         // Generate slug
-        const hashedId = bcryptjs.hashSync(req.user.id, 5);
+        const hashedId = bcryptjs.hashSync(actualUserId, 5);
         const slug = hashedId.split(' ').join('-').toLowerCase().replace(/[^a-zA-Z0-9-]/g, '');
 
         const now = new Date();
@@ -124,13 +130,13 @@ export const createManifest = async (req, res, next) => {
 
         // Create new manifest instance
         const newManifest = new Manifest({
-            userId: req.user.id,
+            userId: actualUserId,
             slug,
             returnedPackages,
             packages,
             totalPackages,
             returnTime,
-            driverName: req.user.username,
+            driverName,
             stantion,
             plate,
             tor,
@@ -151,9 +157,6 @@ export const createManifest = async (req, res, next) => {
 
         // Save new manifest
         const savedManifest = await newManifest.save();
-
-        // Update user's totals
-
 
         res.status(201).json(savedManifest);
     } catch (error) {
