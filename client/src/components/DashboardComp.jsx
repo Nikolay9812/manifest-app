@@ -176,7 +176,7 @@ export default function DashboardComp() {
           </Table>
         </div>
       </div>
-      <div className="grid lg:grid-cols-2 grid-cols-1">
+      {/* <div className="grid lg:grid-cols-2 grid-cols-1">
       
           
       <BarChart
@@ -252,7 +252,7 @@ export default function DashboardComp() {
           <Bar dataKey="totalWorkingHours" stackId="a" fill="#0088FE" />
         </BarChart>
       
-        </div>
+        </div> */}
     </div>
   );
 }
