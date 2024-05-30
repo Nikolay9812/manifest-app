@@ -116,15 +116,6 @@ export default function DashSidebar() {
                   Selection
                 </Sidebar.Item>
               </Link>
-              <Link to="/dashboard?tab=add-user">
-                <Sidebar.Item
-                  active={tab === "add-user"}
-                  icon={HiUser}
-                  as="div"
-                >
-                  Add User
-                </Sidebar.Item>
-              </Link>
             </>
           )}
           {

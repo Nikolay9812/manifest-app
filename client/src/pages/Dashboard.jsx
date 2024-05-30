@@ -4,11 +4,9 @@ import DashSidebar from '../components/DashSidebar'
 import DashProfile from '../components/DashProfile'
 import DashUsers from '../components/DashUsers'
 import DashboardComp from '../components/DashboardComp'
-import DashTable from '../components/DashAddUser'
 import DashCalendar from '../components/DashCalendar/DashCalendar'
 import DashSelection from '../components/DashSelection'
 import DashManifests from '../components/DashManifest/DashManifest'
-import DashAddUser from '../components/DashAddUser'
 
 export default function Dashboard() {
   const location = useLocation()
@@ -30,8 +28,6 @@ export default function Dashboard() {
     </div>
     {/* Profile */}
     {tab === 'profile' && <DashProfile />}
-    {/* Add User*/}
-    {tab === 'add-user' && <DashAddUser />}
     {/* Users */}
     {tab === 'users' && <DashUsers />}
     {/* Manifests */}

@@ -19,7 +19,6 @@ export default function DashCalendar() {
     const [totalManifests, setTotalManifests] = useState(0);
     const [loading, setLoading] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
-    console.log(manifests);
 
     const fetchManifests = async (year, month, userId) => {
         try {
