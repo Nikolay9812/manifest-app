@@ -27,7 +27,14 @@ export const create = async (req, res, next) => {
 export const getTors = async (req, res, next) => {
     try {
         try {
-            const tors = await Tor.find();
+            const startIndex = parseInt(req.query.startIndex) || 0;
+        const limit = parseInt(req.query.limit) || 9;
+        const sortDirection = req.query.sort === 'asc' ? 1 : -1;
+
+        const tors = await Tor.find()
+            .sort({ createdAt: sortDirection })
+            .skip(startIndex)
+            .limit(limit);
     
             res.status(200).json(tors);
         } catch (error) {

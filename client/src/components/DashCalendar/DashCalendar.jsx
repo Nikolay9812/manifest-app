@@ -8,6 +8,9 @@ import CalendarData from './CalendarData';
 import { debounce } from 'lodash';
 import { Spinner } from 'flowbite-react';
 import UserSelector from './UserSelector';
+import CalendarPDF from './CalendarPDF';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { FaDownload } from "react-icons/fa";
 
 export default function DashCalendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -142,6 +145,23 @@ export default function DashCalendar() {
                     ))}
                 </div>
             )}
+            <PDFDownloadLink
+                document={<CalendarPDF
+                    currentDate={currentDate}
+                    manifests={manifests}
+                    totalHours={totalHours}
+                    totalKm={totalKm}
+                    totalDelivered={totalDelivered}
+                    totalReturned={totalReturned}
+                    totalManifests={totalManifests}
+                    loading={loading}
+                />}
+                fileName="calendar.pdf"
+            >
+                {({ blob, url, loading, error }) =>
+                    loading ? 'Loading document...' : <FaDownload className='my-3 text-2xl transition duration-300 text-gray-500 hover:text-gray-300' />
+                }
+            </PDFDownloadLink>
         </div>
     );
 }

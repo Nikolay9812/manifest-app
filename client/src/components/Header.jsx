@@ -59,7 +59,8 @@ export default function Header() {
         </span>
         Sheet
       </Link>
-      <form onSubmit={handleSubmit}>
+      {currentUser && (
+        <form onSubmit={handleSubmit}>
         <TextInput
           type='text'
           placeholder='Search...'
@@ -69,6 +70,7 @@ export default function Header() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </form>
+      )}
       <Button className='w-12 h-10 lg:hidden' color='gray' pill>
         <AiOutlineSearch />
       </Button>

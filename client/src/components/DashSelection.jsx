@@ -26,7 +26,9 @@ export default function DashSelection() {
   const [showModalPlate, setShowModalPlate] = useState(false)
   const [showModalTor, setShowModalTor] = useState(false)
   const [publishError, setPublishError] = useState(false)
-
+  const [showMorePlates, setShowMorePlates] = useState(true);
+  const [showMoreTors, setShowMoreTors] = useState(true);
+  const [showMoreStantions, setShowMoreStantions] = useState(true);
 
   useEffect(() => {
     const fetchStantions = async () => {
@@ -35,6 +37,9 @@ export default function DashSelection() {
         const data = await res.json()
         if (res.ok) {
           setStantions(data)
+          if (data.length < 9) {
+            setShowMoreStantions(false);
+          }
         }
       } catch (error) {
         console.log(error.message)
@@ -46,6 +51,9 @@ export default function DashSelection() {
         const data = await res.json()
         if (res.ok) {
           setPlates(data)
+          if (data.length < 9) {
+            setShowMorePlates(false);
+          }
         }
       } catch (error) {
         console.log(error.message)
@@ -57,6 +65,9 @@ export default function DashSelection() {
         const data = await res.json()
         if (res.ok) {
           setTors(data)
+          if (data.length < 9) {
+            setShowMoreTors(false);
+          }
         }
       } catch (error) {
         console.log(error.message)
@@ -213,6 +224,65 @@ export default function DashSelection() {
     }
   };
 
+  const handleShowMoreItems = async (type) => {
+    let setShowMoreFunction;
+    let apiEndpoint;
+    let arrayToUpdate;
+  
+    switch (type) {
+      case 'plates':
+        setShowMoreFunction = setShowMorePlates;
+        apiEndpoint = '/api/plate/getplates';
+        arrayToUpdate = plates;
+        break;
+      case 'tors':
+        setShowMoreFunction = setShowMoreTors;
+        apiEndpoint = '/api/tor/gettors';
+        arrayToUpdate = tors;
+        break;
+      case 'stantions':
+        setShowMoreFunction = setShowMoreStantions;
+        apiEndpoint = '/api/stantion/getstantions';
+        arrayToUpdate = stantions;
+        break;
+      default:
+        return;
+    }
+  
+    const startIndex = arrayToUpdate.length;
+    try {
+      const res = await fetch(`${apiEndpoint}?startIndex=${startIndex}`);
+      const data = await res.json();
+      if (res.ok) {
+        switch (type) {
+          case 'plates':
+            setPlates((prev) => [...prev, ...data]);
+            if (data.length < 9) {
+              setShowMoreFunction(false);
+            }
+            break;
+          case 'tors':
+            setTors((prev) => [...prev, ...data]);
+            if (data.length < 9) {
+              setShowMoreFunction(false);
+            }
+            break;
+          case 'stantions':
+            setStantions((prev) => [...prev, ...data]);
+            if (data.length < 9) {
+              setShowMoreFunction(false);
+            }
+            break;
+          default:
+            return;
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+
   return (
     <div className='p-3 md:mx-auto'>
       <div className='flex-wrap flex gap-4 justify-center'>
@@ -295,6 +365,14 @@ export default function DashSelection() {
                 </Table.Body>
               ))}
           </Table>
+          {showMorePlates && (
+  <button
+    onClick={() => handleShowMoreItems('plates')}
+    className="w-full text-teal-500 self-center text-sm py-7"
+  >
+    Show more plates
+  </button>
+)}
         </div>
         <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between  p-3 text-sm font-semibold'>
@@ -327,6 +405,15 @@ export default function DashSelection() {
                 </Table.Body>
               ))}
           </Table>
+          
+          {showMoreStantions && (
+  <button
+    onClick={() => handleShowMoreItems('stantions')}
+    className="w-full text-teal-500 self-center text-sm py-7"
+  >
+    Show more stantions
+  </button>
+)}
         </div>
         <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between  p-3 text-sm font-semibold'>
@@ -359,6 +446,14 @@ export default function DashSelection() {
                 </Table.Body>
               ))}
           </Table>
+          {showMoreTors && (
+  <button
+    onClick={() => handleShowMoreItems('tors')}
+    className="w-full text-teal-500 self-center text-sm py-7"
+  >
+    Show more tors
+  </button>
+          )}
         </div>
       </div>
       <Modal show={showModalTor} onClose={() => setShowModalTor(false)} popup size='md'>
