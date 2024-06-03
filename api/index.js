@@ -8,12 +8,15 @@ import stationRoutes from './routes/station.route.js'
 import plateRoutes from './routes/plate.route.js'
 import torRoutes from './routes/tor.route.js'
 import cookieParser from 'cookie-parser'
+import path from 'path'
 
 dotenv.config()
 
 mongoose.connect(process.env.MONGO)
     .then(() => { console.log('Database is connected!') })
     .catch(err => { console.log(err) })
+
+    const __dirname = path.resolve()
 
 const app = express()
 
@@ -30,6 +33,12 @@ app.use('/api/manifest', manifestRoutes)
 app.use('/api/stantion', stationRoutes)
 app.use('/api/plate', plateRoutes)
 app.use('/api/tor', torRoutes)
+
+app.use(express.static(path.join(__dirname, '/client/dist')))
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname,'client','dist','index.html'))
+})
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500
