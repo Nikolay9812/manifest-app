@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user.route.js';
@@ -21,6 +22,11 @@ mongoose.connect(process.env.MONGO, {
 
 const __dirname = path.resolve();
 const app = express();
+
+app.use(cors({
+    origin: 'https://manifest-app.onrender.com/', // Adjust this to your frontend's domain
+    credentials: true,
+  }));
 
 app.use(express.json());
 app.use(cookieParser());
