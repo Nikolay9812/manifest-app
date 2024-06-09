@@ -596,24 +596,28 @@ export default function DashSelection() {
             <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
               Add new vehicle
             </h3>
+            <div className="flex flex-col gap-3">
             <input
               type="text"
               value={plate}
               onChange={(e) => setPlate(e.target.value)}
               placeholder="Enter Plate Name"
-            />
+              />
+              <i className="text-gray-500">TUV Start Date</i>
             <input
               type="date"
               value={tuvStartDate}
               onChange={(e) => setTuvStartDate(e.target.value)}
               placeholder="TUV Start Date"
-            />
+              />
+              <i className="text-gray-500">TUV Expiry Date</i>
             <input
               type="date"
               value={tuvExpiryDate}
               onChange={(e) => setTuvExpiryDate(e.target.value)}
               placeholder="TUV Expiry Date"
             />
+            </div>
             {publishError && <p className="text-red-500">{publishError}</p>}
             <div className="flex justify-center gap-4 mt-3">
               <Button color="success" onClick={handleSubmitPlate}>

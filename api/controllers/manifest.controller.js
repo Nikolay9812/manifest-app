@@ -8,11 +8,18 @@ export const getAllManifests = async (req, res, next) => {
         const { userId: queryUserId, month, year } = req.query;
         const userId = queryUserId || req.user.id;
 
-        // Query manifests for the specified month and year
+        const parsedMonth = parseInt(month, 10);
+        const parsedYear = parseInt(year, 10);
+
+        // Query manifests for the specified month and year using the date field
         const manifests = await Manifest.find({
             $or: [{ userId }, { secondUserId: userId }],
-            month: parseInt(month), // Convert month to integer
-            year: parseInt(year) // Convert year to integer
+            $expr: {
+                $and: [
+                    { $eq: [{ $month: '$date' }, parsedMonth] },
+                    { $eq: [{ $year: '$date' }, parsedYear] }
+                ]
+            }
         }).populate('userId', 'username');
 
         const manifestsWithUsers = await Promise.all(manifests.map(async (manifest) => {
@@ -28,7 +35,7 @@ export const getAllManifests = async (req, res, next) => {
             };
         }));
 
-        // Calculate total hours for the month
+        // Calculate total hours, km, delivered, and returned packages for the month
         let totalHours = 0;
         let totalKm = 0;
         let totalDelivered = 0;
@@ -292,6 +299,17 @@ export const getManifests = async (req, res, next) => {
     }
 }
 
+export const deleteCurrentManifest = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, 'You are not allowed to delete this manifest'))
+    }
+    try {
+        await Manifest.findByIdAndDelete(req.params.manifestId)
+        res.status(200).json('The manifest has been deleted')
+    } catch (error) {
+        next(error)
+    }
+}
 export const deleteManifest = async (req, res, next) => {
     if (!req.user.isAdmin || req.user.id !== req.params.userId) {
         return next(errorHandler(403, 'You are not allowed to delete this manifest'))

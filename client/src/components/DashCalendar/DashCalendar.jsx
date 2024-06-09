@@ -63,7 +63,7 @@ export default function DashCalendar() {
 
   const getWorkedHoursForDate = (date) => {
     const manifestsForDate = manifests.filter((manifest) => {
-      const createdAtDate = new Date(manifest.createdAt);
+      const createdAtDate = new Date(manifest.date);
       return (
         createdAtDate.getFullYear() === currentDate.getFullYear() &&
         createdAtDate.getMonth() === currentDate.getMonth() &&

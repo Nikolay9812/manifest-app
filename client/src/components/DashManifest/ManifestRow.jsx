@@ -61,7 +61,7 @@ export default function ManifestRow({ manifest, onDeleteManifest, onApproveManif
                             </span>
                         </Table.Cell>
                         <Table.Cell>
-                            <Link className='text-teal- hover:underline' to={`/update-manifest/${manifest._id}`}>
+                            <Link className='text-teal-500 hover:underline' to={`/update-manifest/${manifest._id}`}>
                                 <span>
                                     Edit
                                 </span>
