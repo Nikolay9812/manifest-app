@@ -97,6 +97,9 @@ const manifestSchema = new mongoose.Schema({
     }, year: {
         type: Number,
         required: true
+    }, date: {
+        type: Date,
+        required: true
     }
 }, { timestamps: true })
 

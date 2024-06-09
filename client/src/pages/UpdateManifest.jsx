@@ -16,6 +16,7 @@ export default function UpdateManifest() {
     plate: '',
     tor: '',
     secondUserId: '',
+    date: '',
     kmStart: '',
     kmEnd: '',
     startTime: '',
@@ -196,6 +197,13 @@ export default function UpdateManifest() {
             ))}
           </Select>
         </div>
+        <i>Date</i>
+        <TextInput
+          type='text'
+          onChange={(e) =>
+            setFormData({ ...formData, date: e.target.value })}
+          value={formData.date.substring(0, 10)}
+        />
         <i>Starting kilometers</i>
         <TextInput
           type='number'

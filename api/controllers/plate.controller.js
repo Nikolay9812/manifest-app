@@ -3,10 +3,10 @@ import Plate from "../models/plate.model.js";
 
 export const create = async (req, res, next) => {
     try {
-        const { name } = req.body
+        const { name, tuvStartDate, tuvExpiryDate } = req.body;
 
-        if (!name) {
-            return res.status(400).json({ error: "Plate name is required" });
+        if (!name || !tuvStartDate || !tuvExpiryDate) {
+            return res.status(400).json({ error: "Plate name, TUV start date, and TUV expiry date are required" });
         }
 
         const existingPlate = await Plate.findOne({ name });
@@ -14,32 +14,29 @@ export const create = async (req, res, next) => {
             return res.status(400).json({ error: "Plate already exists" });
         }
 
-        const newPlate = new Plate({name})
+        const newPlate = new Plate({ name, tuvStartDate, tuvExpiryDate });
 
-        const createPlate = await newPlate.save()
+        const createPlate = await newPlate.save();
 
-        res.status(201).json(createPlate)
+        res.status(201).json(createPlate);
     } catch (error) {
-        next(error)
+        next(error);
     }
 };
 
+
 export const getPlates = async (req, res, next) => {
     try {
-        try {
-            const startIndex = parseInt(req.query.startIndex) || 0;
-        const limit = parseInt(req.query.limit) || 9;
-        const sortDirection = req.query.sort === 'asc' ? 1 : -1;
+        const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.sort === 'asc' ? 1 : -1;
 
-        const plates = await Plate.find()
-            .sort({ createdAt: sortDirection })
-            .skip(startIndex)
-            .limit(limit);
-    
-            res.status(200).json(plates);
-        } catch (error) {
-            next(error)
-        }
+    const plates = await Plate.find()
+        .sort({ createdAt: sortDirection })
+        .skip(startIndex)
+        .limit(limit);
+
+        res.status(200).json(plates);
     } catch (error) {
         next(error)
     }

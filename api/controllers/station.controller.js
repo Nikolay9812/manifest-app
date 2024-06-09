@@ -26,20 +26,16 @@ export const create = async (req, res, next) => {
 
 export const getStations = async (req, res, next) => {
     try {
-        try {
-            const startIndex = parseInt(req.query.startIndex) || 0;
-        const limit = parseInt(req.query.limit) || 9;
-        const sortDirection = req.query.sort === 'asc' ? 1 : -1;
+        const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.sort === 'asc' ? 1 : -1;
 
-        const stations = await Station.find()
-            .sort({ createdAt: sortDirection })
-            .skip(startIndex)
-            .limit(limit);
-    
-            res.status(200).json(stations);
-        } catch (error) {
-            next(error)
-        }
+    const stations = await Station.find()
+        .sort({ createdAt: sortDirection })
+        .skip(startIndex)
+        .limit(limit);
+
+        res.status(200).json(stations);
     } catch (error) {
         next(error)
     }

@@ -4,6 +4,14 @@ const plateSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+    },
+    tuvStartDate: {
+        type: Date,
+        required: true,
+    },
+    tuvExpiryDate: {
+        type: Date,
+        required: true,
     }
 }, { timestamps: true });
 

@@ -117,7 +117,7 @@ const ManifestItem = ({ manifest, userId }) => {
                 </div>
                 <div className="flex items-center gap-3">
                     <span className=' text-sm '>Date:</span>
-                    <div className="dark:text-white">{new Date(manifest.createdAt).toDateString()}</div>
+                    <div className="dark:text-white">{new Date(manifest.date).toDateString()}</div>
                 </div>
                 <div className="flex items-center gap-3">
                     <span className=' text-sm '>Firma:</span>

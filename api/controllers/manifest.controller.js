@@ -68,7 +68,8 @@ export const createManifest = async (req, res, next) => {
             lastDelivery,
             endTime,
             status,
-            userId // Add userId to the destructuring
+            userId, // Add userId to the destructuring
+            date
         } = req.body;
 
         // Check if required fields are present
@@ -152,7 +153,8 @@ export const createManifest = async (req, res, next) => {
             month,
             year,
             status,
-            secondUserId
+            secondUserId,
+            date:new Date()
         });
 
         // Save new manifest
@@ -372,6 +374,7 @@ export const updateManifest = async (req, res, next) => {
                     workingHours: workingHours,
                     month,
                     year,
+                    date:req.body.date
                 }
             }, { new: true }
         )
