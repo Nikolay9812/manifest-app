@@ -15,6 +15,8 @@ import ManifestPage from "./pages/ManifestPage";
 import Search from "./pages/Search";
 
 export default function App() {
+  console.log('App component rendered') // Debugging statement
+
   return (
     <BrowserRouter>
       <Header />
