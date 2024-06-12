@@ -4,7 +4,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdKeyboardDoubleArrowLeft, M
 
 const CalendarHeader = ({ currentDate, goToPreviousMonth, goToNextMonth, goToPreviousYear, goToNextYear }) => {
     return (
-        <div className="flex justify-between p-3 text-2xl">
+        <div className="flex justify-between p-3 text-sm sm:text-xl">
             <MdKeyboardDoubleArrowLeft className='cursor-pointer opacity-[1] transition-opacity duration-300 hover:opacity-[.2]' onClick={goToPreviousYear} />
             <div className="flex items-center justify-center gap-3">
                 <MdKeyboardArrowLeft className='cursor-pointer opacity-[1] transition-opacity duration-300 hover:opacity-[.2]' onClick={goToPreviousMonth} />

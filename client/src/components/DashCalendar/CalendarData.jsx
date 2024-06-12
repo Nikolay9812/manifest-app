@@ -7,7 +7,7 @@ const CalendarData = ({ manifest }) => {
   return (
     <>
       <div
-        className={`relative w-10 h-10 ${manifest.secondUserId ? "mr-4" : ""}`}
+        className={`relative w-7 h-7 sm:w-10 sm:h-10 ${manifest.secondUserId ? "mr-4" : ""}`}
       >
         <div className="group">
           <Link to={`/manifest/${manifest.slug}`}>
@@ -38,7 +38,7 @@ const CalendarData = ({ manifest }) => {
           </div>
         )}
       </div>
-      <div className="p-2">{formatHours(manifest.workingHours)}</div>
+      <div className="p-2 text-sm sm:text-xl">{formatHours(manifest.workingHours)}</div>
     </>
   );
 };
