@@ -17,8 +17,8 @@ import Search from "./pages/Search";
 export default function App() {
   return (
     <BrowserRouter>
-      <Header />
       <ScrollToTop />
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
