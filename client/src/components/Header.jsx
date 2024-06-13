@@ -15,6 +15,7 @@ export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showSearchInput, setShowSearchInput] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -48,6 +49,10 @@ export default function Header() {
     navigate(`/search?${searchQuery}`);
   };
 
+  const handleProfileClick = () => {
+    navigate("/dashboard?tab=profile");
+  };
+
   return (
     <Navbar className="border-b-2">
       <Link
@@ -60,20 +65,38 @@ export default function Header() {
         Sheet
       </Link>
       {currentUser && (
-        <form onSubmit={handleSubmit}>
-        <TextInput
-          type='text'
-          placeholder='Search...'
-          rightIcon={AiOutlineSearch}
-          className='hidden lg:inline'
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </form>
+        <form onSubmit={handleSubmit} className="hidden lg:block">
+          <TextInput
+            id="header-search"
+            name="searchTerm"
+            type="text"
+            placeholder="Search..."
+            rightIcon={AiOutlineSearch}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </form>
       )}
-      <Button className="w-12 h-10 lg:hidden" color="gray" pill>
+      <Button
+        className="w-12 h-10 lg:hidden"
+        color="gray"
+        pill
+        onClick={() => setShowSearchInput(!showSearchInput)}
+      >
         <AiOutlineSearch />
       </Button>
+      {currentUser && showSearchInput && (
+        <form onSubmit={handleSubmit} className="lg:hidden w-full my-3">
+          <TextInput
+            id="header-search-mobile"
+            name="searchTerm"
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </form>
+      )}
       <div className="flex gap-2 md:order-2">
         <Button
           className="w-12 h-10 sm:inline"
@@ -97,9 +120,7 @@ export default function Header() {
                 {currentUser.email}
               </span>
             </Dropdown.Header>
-            <Link to={"/dashboard?tab=profile"}>
-              <Dropdown.Item>Profile</Dropdown.Item>
-            </Link>
+            <Dropdown.Item onClick={handleProfileClick}>Profile</Dropdown.Item>
             <Dropdown.Divider />
             <Dropdown.Item onClick={handleSignout}>Sign out</Dropdown.Item>
           </Dropdown>

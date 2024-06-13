@@ -12,7 +12,7 @@ const CalendarTotals = ({
   totalManifests,
 }) => {
   return (
-    <div className="flex justify-between gap-4 p-3 text-sm sm:text-xl">
+    <div className="flex justify-between gap-4 p-3 text-[0.8rem] sm:text-xl">
       <div className="flex items-center gap-2">
         <CiClock2 />
         {totalHours}
