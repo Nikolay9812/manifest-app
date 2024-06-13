@@ -95,7 +95,7 @@ const PrintContent = ({
 
   const getWeekdayShort = (day, month, year) => {
     const date = new Date(year, month, day);
-    return date.toLocaleString("default", { weekday: "short" });
+    return date.toLocaleString("en-US", { weekday: "short" });
   };
 
   const calculateTotalExpenses = () => {
@@ -108,10 +108,10 @@ const PrintContent = ({
   const totalExpenses = calculateTotalExpenses();
 
   return (
-    <div className="p-4" ref={contentRef}>
+    <div className="p-4 text-[.5rem] sm:text-xl" ref={contentRef}>
       <h2 className="text-2xl font-bold mb-4">Driver: {selectedUserName}</h2>
       <h3 className="text-xl mb-4">
-        {currentDate.toLocaleString("default", { month: "long" })}{" "}
+        {currentDate.toLocaleString("en-US", { month: "long" })}{" "}
         {currentDate.getFullYear()}
       </h3>
       <div>
